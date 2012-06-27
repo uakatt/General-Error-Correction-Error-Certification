@@ -1,0 +1,17 @@
+Index: work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml	(revision 0)
++++ work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml	(revision 3010)
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<beans xmlns="http://www.springframework.org/schema/beans"
++ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++ xmlns:p="http://www.springframework.org/schema/p" 
++ xmlns:dd="http://rice.kuali.org/dd" 
++ xsi:schemaLocation="http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd         http://rice.kuali.org/dd         http://rice.kuali.org/dd/dd.xsd">
++
++  <bean id="GeneralErrorCorrectionDocument" parent="GeneralErrorCorrectionDocument-parentBean">
++  	<property name="documentClass" value="edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument"/>
++  </bean>
++</beans>
+\ No newline at end of file

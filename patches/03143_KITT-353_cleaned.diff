@@ -1,0 +1,12 @@
+Index: work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml	(revision 3142)
++++ work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml	(revision 3143)
+@@ -7,5 +7,6 @@
+ 
+   <bean id="GeneralErrorCorrectionDocument" parent="GeneralErrorCorrectionDocument-parentBean">
+   	<property name="documentClass" value="edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument"/>
++  	<property name="promptBeforeValidationClass" value="edu.arizona.kfs.fp.document.validation.impl.GeneralErrorCorrectionDocumentPreRules"/>
+   </bean>
+ </beans>
+\ No newline at end of file

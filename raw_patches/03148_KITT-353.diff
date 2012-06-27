@@ -1,0 +1,13 @@
+Index: financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml
+===================================================================
+--- financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml	(revision 3147)
++++ financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml	(revision 3148)
+@@ -51,7 +51,7 @@
+ 		<form-bean name="YearEndTransferOfFundsForm"
+ 			type="org.kuali.kfs.fp.document.web.struts.YearEndTransferOfFundsForm" />
+ 		<form-bean name="GeneralErrorCorrectionForm"
+-			type="org.kuali.kfs.fp.document.web.struts.GeneralErrorCorrectionForm" />
++			type="edu.arizona.kfs.fp.document.web.struts.GeneralErrorCorrectionForm" />
+ 		<form-bean name="YearEndGeneralErrorCorrectionForm"
+ 			type="org.kuali.kfs.fp.document.web.struts.YearEndGeneralErrorCorrectionForm" />
+ 		<form-bean name="DistributionOfIncomeAndExpenseForm"

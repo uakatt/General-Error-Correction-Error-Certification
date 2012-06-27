@@ -1,0 +1,32 @@
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 3024)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 3025)
+@@ -48,9 +48,9 @@
+     public boolean validate(AttributedDocumentEvent event) {
+         boolean refNumValid;
+         
+-        LOG.info("validate ref number called");
++        LOG.debug("validate ref number called");
+         
+-        LOG.info("parm: " + parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM));
++        LOG.debug("parm: " + parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM));
+         
+         // if REFERENCE_NUMBER_VALIDATION_IND parameter is false, don't do validation
+         if (parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM) == false) {
+@@ -85,13 +85,13 @@
+      * @return Collection representing the matching GL entry
+      */
+     protected Collection getRefNumberMatch() {
+-        LOG.info("ref num: " + accountingLineForValidation.getReferenceNumber());
++        LOG.debug("ref num: " + accountingLineForValidation.getReferenceNumber());
+         
+         Map criteria = new HashMap();
+         criteria.put("documentNumber", accountingLineForValidation.getReferenceNumber());
+         
+         Collection results = getBusinessObjectService().findMatching(Entry.class, criteria);
+-        LOG.info("results: " + results);
++        LOG.debug("results: " + results);
+         
+         return results;        
+     }

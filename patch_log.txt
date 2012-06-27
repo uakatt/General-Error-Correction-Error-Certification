@@ -1,0 +1,416 @@
+------------------------------------------------------------------------
+r2142 | hlo | 2009-05-26 17:50:20 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2143 | hlo | 2009-05-26 17:50:55 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2144 | hlo | 2009-05-26 17:51:11 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2145 | hlo | 2009-05-26 17:53:31 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/AZKFSConstants.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2146 | hlo | 2009-05-26 17:53:46 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSKeyConstants.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2147 | hlo | 2009-05-26 17:54:04 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2148 | hlo | 2009-05-26 17:54:29 -0700 (Tue, 26 May 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/db/scripts/arizona/data.sql
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2998 | hlo | 2009-06-16 11:57:58 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/db/scripts/arizona/schema-oracle.sql
+
+KITT-353 Adding Error Certification table
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r2999 | hlo | 2009-06-16 12:00:40 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/db/scripts/arizona/data.sql
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3003 | hlo | 2009-06-16 13:51:57 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/GeneralErrorCorrectionDocument.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3004 | hlo | 2009-06-16 13:53:55 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/EntryNotFoundException.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3005 | hlo | 2009-06-16 13:54:07 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/ErrorCertificationValidation.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3006 | hlo | 2009-06-16 13:54:36 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3007 | hlo | 2009-06-16 13:58:08 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3008 | hlo | 2009-06-16 13:58:39 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/FinancialProcessingValidators.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3009 | hlo | 2009-06-16 14:00:52 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3010 | hlo | 2009-06-16 14:01:55 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3011 | hlo | 2009-06-16 14:02:12 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/businessobject/ErrorCertification.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3012 | hlo | 2009-06-16 14:02:24 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/businessobject/datadictionary/ErrorCertification.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3014 | hlo | 2009-06-16 14:03:34 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/ojb-fp.xml
+
+KITT-353 Adding Error Certification
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3015 | hlo | 2009-06-16 14:05:09 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3016 | hlo | 2009-06-16 14:05:49 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/web
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/web/struts
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3017 | hlo | 2009-06-16 14:07:23 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/AZKFSConstants.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3018 | hlo | 2009-06-16 14:08:48 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSKeyConstants.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3019 | hlo | 2009-06-16 14:10:24 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3020 | hlo | 2009-06-16 14:13:48 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3022 | hlo | 2009-06-16 14:16:29 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/jsp/fp/GeneralErrorCorrection.jsp
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3025 | hlo | 2009-06-16 14:33:09 -0700 (Tue, 16 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+
+KITT-353 Modified LOG lines.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3143 | hlo | 2009-06-22 16:31:39 -0700 (Mon, 22 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3144 | hlo | 2009-06-22 16:31:53 -0700 (Mon, 22 Jun 2009) | 1 line
+Changed paths:
+   D /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/FinancialProcessingValidators.xml
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/ErrorCertificationValidation.java
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3145 | hlo | 2009-06-22 16:32:29 -0700 (Mon, 22 Jun 2009) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSConstants.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSKeyConstants.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3146 | hlo | 2009-06-22 16:32:50 -0700 (Mon, 22 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3147 | hlo | 2009-06-22 16:33:25 -0700 (Mon, 22 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r3148 | hlo | 2009-06-22 16:39:27 -0700 (Mon, 22 Jun 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml
+
+KITT-353 Adding UA version of GEC Form.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r4027 | hlo | 2009-07-21 13:40:13 -0700 (Tue, 21 Jul 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml
+
+KITT-353 Changed parent reference to the rSmart bean.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r4210 | hlo | 2009-07-31 12:09:45 -0700 (Fri, 31 Jul 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+
+KITT-353 Changing bean name back to GeneralErrorCorrectionDocument.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r4607 | hlo | 2009-08-31 10:20:41 -0700 (Mon, 31 Aug 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+
+KITT-353  Fixing typos in comments.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r4688 | hlo | 2009-09-04 18:23:32 -0700 (Fri, 04 Sep 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+
+KITT-353 Cleaned up code.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r4753 | hlo | 2009-09-08 14:21:47 -0700 (Tue, 08 Sep 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+
+KITT-353 Refactored code.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r5240 | hlo | 2009-10-02 14:41:20 -0700 (Fri, 02 Oct 2009) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml
+
+KITT-353 KITT-360 Re-adding previous code changes.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r6860 | hlo | 2010-01-06 14:24:17 -0700 (Wed, 06 Jan 2010) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/YearEndGeneralErrorCorrectionDocument.java
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r6861 | hlo | 2010-01-06 14:24:51 -0700 (Wed, 06 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r6862 | hlo | 2010-01-06 14:26:27 -0700 (Wed, 06 Jan 2010) | 1 line
+Changed paths:
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r6863 | hlo | 2010-01-06 14:26:47 -0700 (Wed, 06 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/jsp/fp/YearEndGeneralErrorCorrection.jsp
+
+KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r6864 | hlo | 2010-01-06 14:28:12 -0700 (Wed, 06 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/db/scripts/arizona/data.sql
+
+KITT-353, KITT-360 Adding parms for YEGE. Also adding back parms for YEST.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r6865 | hlo | 2010-01-06 14:30:31 -0700 (Wed, 06 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/ojb-fp.xml
+
+KITT-353 Adding YEGE.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7228 | hlo | 2010-01-20 11:17:57 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java
+
+KITT-353 Fixed parameter error - wasn't reading correct parameter for YEGE.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7229 | hlo | 2010-01-20 11:20:37 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   D /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java
+
+KITT-353 Removed because this class is unnecessary.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7232 | hlo | 2010-01-20 11:24:08 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/struts-config.xml
+
+KITT-353, KITT-360 Modified because edu/arizona versions of GEC and SET forms removed.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7233 | hlo | 2010-01-20 11:25:38 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/db/scripts/arizona/data.sql
+
+KITT-353, KITT-360 Re-adding YEST and YEGE parms.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7238 | hlo | 2010-01-20 16:38:23 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/branches/3.0/work/db/scripts/arizona/data.sql
+
+Merging with KITT-353, KITT-360
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7240 | hlo | 2010-01-20 16:49:03 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+   M /financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+   M /financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+   D /financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java
+   M /financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java
+
+Merging KITT-353
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7241 | hlo | 2010-01-20 16:49:42 -0700 (Wed, 20 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs/branches/3.0/work/web-root/WEB-INF/struts-config.xml
+
+Merging KITT-353, KITT-360
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7270 | hlo | 2010-01-21 15:19:36 -0700 (Thu, 21 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs-cfg-dbs/trunk/latest/dat/KRNS_PARM_T.xml
+   A /financial-system/kfs-cfg-dbs/trunk/update/KITT-744.xml
+
+KITT-744 Adding parms for YEST and YEGE.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r7272 | hlo | 2010-01-21 15:27:26 -0700 (Thu, 21 Jan 2010) | 1 line
+Changed paths:
+   M /financial-system/kfs-cfg-dbs/trunk/update.xml
+
+KITT-744 Including parms for YEST and YEGE.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r15345 | hlo@CATNET.ARIZONA.EDU | 2010-12-22 17:20:08 -0700 (Wed, 22 Dec 2010) | 3 lines
+Changed paths:
+   M /financial-system/kfs/trunk/test/unit/src/edu/arizona/kfs/fp/document/validation/GECErrorCertificationValidationTest.java
+   M /financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+
+KFSI-2900
+KITT-2004
+Adding reference origin code to validations and unit test. Also modified error message.
+------------------------------------------------------------------------

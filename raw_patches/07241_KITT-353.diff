@@ -1,0 +1,22 @@
+Index: financial-system/kfs/branches/3.0/work/web-root/WEB-INF/struts-config.xml
+===================================================================
+--- financial-system/kfs/branches/3.0/work/web-root/WEB-INF/struts-config.xml	(revision 7240)
++++ financial-system/kfs/branches/3.0/work/web-root/WEB-INF/struts-config.xml	(revision 7241)
+@@ -55,7 +55,7 @@
+ 		<form-bean name="YearEndTransferOfFundsForm"
+ 			type="org.kuali.kfs.fp.document.web.struts.YearEndTransferOfFundsForm" />
+ 		<form-bean name="GeneralErrorCorrectionForm"
+-			type="edu.arizona.kfs.fp.document.web.struts.GeneralErrorCorrectionForm" />
++			type="org.kuali.kfs.fp.document.web.struts.GeneralErrorCorrectionForm" />
+ 		<form-bean name="YearEndGeneralErrorCorrectionForm"
+ 			type="edu.arizona.kfs.fp.document.web.struts.YearEndGeneralErrorCorrectionForm" />
+ 		<form-bean name="DistributionOfIncomeAndExpenseForm"
+@@ -113,7 +113,7 @@
+ 
+ 		<!-- Labor Distribution Bean Definitions -->
+ 		<form-bean name="LaborSalaryExpenseTransferForm"
+-			type="edu.arizona.kfs.module.ld.document.web.struts.SalaryExpenseTransferForm" />
++			type="org.kuali.kfs.module.ld.document.web.struts.SalaryExpenseTransferForm" />
+ 		<form-bean name="LaborYearEndSalaryExpenseTransferForm"
+ 			type="edu.arizona.kfs.module.ld.document.web.struts.YearEndSalaryExpenseTransferForm" />
+ 		<form-bean name="LaborBenefitExpenseTransferForm"

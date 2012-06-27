@@ -1,0 +1,37 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 3006)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 3007)
+@@ -37,6 +37,7 @@
+ 
+ public class GeneralErrorCorrectionRefNumberValidation extends GenericValidation {
+     private ParameterService parameterService;
++    private BusinessObjectService businessObjectService;
+     private AccountingLineBase accountingLineForValidation;
+     
+     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralErrorCorrectionRefNumberValidation.class);
+@@ -125,10 +126,18 @@
+     }
+     
+     /**
+-     * Gets the BO service from Spring.
++     * Gets the BO service.
+      * @return BusinessObjectService
+      */
+-    private BusinessObjectService getBusinessObjectService() {
+-        return SpringContext.getBean(BusinessObjectService.class);
+-    }  
+-}
++    public BusinessObjectService getBusinessObjectService() {
++        return this.businessObjectService;
++    }
++    
++    /**
++     * Sets the BO service.
++     * @param businessObjectService to set.
++     */
++    public void setBusinessObjectService(BusinessObjectService businessObjectService) {
++        this.businessObjectService = businessObjectService;
++    }    
++}
+\ No newline at end of file

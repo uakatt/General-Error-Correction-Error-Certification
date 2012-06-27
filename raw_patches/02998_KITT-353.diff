@@ -1,0 +1,26 @@
+Index: financial-system/kfs/trunk/work/db/scripts/arizona/schema-oracle.sql
+===================================================================
+--- financial-system/kfs/trunk/work/db/scripts/arizona/schema-oracle.sql	(revision 2997)
++++ financial-system/kfs/trunk/work/db/scripts/arizona/schema-oracle.sql	(revision 2998)
+@@ -157,3 +157,21 @@
+ ADD CONSTRAINT CA_ORG_EXT_T_TC1  
+ FOREIGN KEY (FIN_COA_CD,ORG_CD) 
+ REFERENCES CA_ORG_T (FIN_COA_CD,ORG_CD) ON DELETE CASCADE ;
++
++CREATE SEQUENCE "ERROR_CERT_ID_SEQ"				MINVALUE 1 MAXVALUE 999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE ORDER  NOCYCLE;
++CREATE TABLE FP_ERROR_CERT_T
++(
++   ERROR_CERT_ID				decimal(27)		NOT NULL PRIMARY KEY,		--New field in FP_ERROR_COR_DOC_T Table
++   OBJ_ID						varchar2(36) 	NOT NULL,          			--Required on all Tables
++   VER_NBR						decimal(8) 		NOT NULL,		          	--Required on all Tables
++   EXPENDITURE_DESC				varchar2(400),								--Field in Error Certification Tab
++   EXPENDITURE_PROJ_BENEFIT		varchar2(400),								--Field in Error Certification Tab
++   ERROR_DESC					varchar2(400),								--Field in Error Certification Tab
++   ERROR_CORR_REASON			varchar2(400)								--Field in Error Certification Tab
++);
++ALTER TABLE FP_ERROR_COR_DOC_T
++ADD ERROR_CERT_ID DECIMAL(27);
++ALTER TABLE FP_ERROR_COR_DOC_T
++ADD CONSTRAINT FP_ERROR_CERT_T_TC0  
++FOREIGN KEY (ERROR_CERT_ID)
++REFERENCES FP_ERROR_CERT_T (ERROR_CERT_ID) ON DELETE CASCADE;

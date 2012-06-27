@@ -1,0 +1,78 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/ojb-fp.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/ojb-fp.xml	(revision 6864)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/ojb-fp.xml	(revision 6865)
+@@ -33,6 +33,7 @@
+     <field-descriptor name="errorCorrectionReason" column="ERROR_CORR_REASON" jdbc-type="VARCHAR" />
+ </class-descriptor>
+ 
++<!-- GENERAL ERROR CORRECTION DOCUMENT MAPPINGS -->
+ <class-descriptor class="edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument" table="FP_ERROR_COR_DOC_T">
+     <!--  common transactional document base attributes -->
+     <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
+@@ -90,6 +91,65 @@
+     </reference-descriptor>    
+ </class-descriptor>
+ 
++<!-- YEAR END GENERAL ERROR CORRECTION DOCUMENT MAPPINGS -->
++<class-descriptor class="org.kuali.kfs.fp.document.YearEndGeneralErrorCorrectionDocument" table="FP_ERROR_COR_DOC_T">
++    <!--  common transactional document base attributes -->
++    <field-descriptor name="documentNumber" column="FDOC_NBR" jdbc-type="VARCHAR" primarykey="true" />
++    <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
++    <field-descriptor name="objectId" column="OBJ_ID" jdbc-type="VARCHAR" index="true" />
++    <field-descriptor name="postingYear" column="FDOC_POST_YR" jdbc-type="INTEGER" />
++    <field-descriptor name="nextSourceLineNumber" column="FDOC_NXT_FRM_NBR" jdbc-type="INTEGER" />
++    <field-descriptor name="nextTargetLineNumber" column="FDOC_NXT_TO_NBR" jdbc-type="INTEGER" />
++
++    <!--  document specific attributes -->
++    <field-descriptor name="postingPeriodCode" column="FDOC_POST_PRD_CD" jdbc-type="VARCHAR" />
++
++	<!-- ARIZONA MODIFICATION (primary key in error certification table) -->
++ 	<field-descriptor name="errorCertID" column="ERROR_CERT_ID" jdbc-type="INTEGER" />
++ 	
++    <!-- collection references -->
++    <collection-descriptor name="sourceAccountingLines" proxy="true" element-class-ref="org.kuali.kfs.fp.businessobject.GECSourceAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
++        <orderby name="sequenceNumber" sort="ASC" />
++        <inverse-foreignkey field-ref="documentNumber" />
++				<query-customizer class="org.kuali.kfs.sys.dataaccess.impl.OjbQueryCustomizer">
++						<attribute attribute-name="financialDocumentLineTypeCode" attribute-value="F" />
++				</query-customizer>
++    </collection-descriptor>
++
++    <collection-descriptor name="targetAccountingLines" proxy="true" element-class-ref="org.kuali.kfs.fp.businessobject.GECTargetAccountingLine" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
++        <orderby name="sequenceNumber" sort="ASC" />
++        <inverse-foreignkey field-ref="documentNumber" />
++				<query-customizer class="org.kuali.kfs.sys.dataaccess.impl.OjbQueryCustomizer">
++						<attribute attribute-name="financialDocumentLineTypeCode" attribute-value="T" />
++				</query-customizer>
++    </collection-descriptor>
++
++    <collection-descriptor name="generalLedgerPendingEntries" proxy="true" element-class-ref="org.kuali.kfs.sys.businessobject.GeneralLedgerPendingEntry" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
++        <orderby name="transactionLedgerEntrySequenceNumber" sort="ASC" />
++        <inverse-foreignkey field-ref="documentNumber" />
++    </collection-descriptor>
++
++    <!--  object references -->
++    <reference-descriptor name="documentHeader" class-ref="org.kuali.kfs.sys.businessobject.FinancialSystemDocumentHeader" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true" >
++        <foreignkey field-ref="documentNumber" />
++    </reference-descriptor>
++
++    <reference-descriptor name="accountingPeriod" class-ref="org.kuali.kfs.coa.businessobject.AccountingPeriod" auto-retrieve="true" auto-update="none" auto-delete="none" proxy="true" >
++        <foreignkey field-ref="postingYear" />
++        <foreignkey field-ref="postingPeriodCode" />
++    </reference-descriptor>
++    
++    <reference-descriptor name="capitalAssetInformation" class-ref="org.kuali.kfs.fp.businessobject.CapitalAssetInformation" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true" >
++        <foreignkey field-ref="documentNumber" />
++    </reference-descriptor> 
++    
++    <!-- ARIZONA MODIFICATION (for error certification tab) -->
++    <reference-descriptor name="errorCertification" class-ref="edu.arizona.kfs.fp.businessobject.ErrorCertification" auto-retrieve="true" auto-update="object" auto-delete="object" proxy="true" >
++        <foreignkey field-ref="errorCertID" />
++    </reference-descriptor>     
++</class-descriptor>
++
++
+ <!-- ARIZONA MODIFICATION (for PCard Level 3) -->
+ <class-descriptor class="edu.arizona.kfs.fp.businessobject.ProcurementCardLevel3Add" table="FP_PRCRMNT_LVL3_ADD_T">
+     <field-descriptor name="transactionReferenceNumber" column="TRN_REF_NBR" jdbc-type="VARCHAR" primarykey="true" index="true" />

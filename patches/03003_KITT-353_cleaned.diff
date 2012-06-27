@@ -1,0 +1,65 @@
+Index: work/src/edu/arizona/kfs/fp/document/GeneralErrorCorrectionDocument.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/GeneralErrorCorrectionDocument.java	(revision 0)
++++ work/src/edu/arizona/kfs/fp/document/GeneralErrorCorrectionDocument.java	(revision 3003)
+@@ -0,0 +1,60 @@
++/*
++ * Copyright 2009 The Kuali Foundation.
++ * 
++ * Licensed under the Educational Community License, Version 1.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl1.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.fp.document;
++
++import edu.arizona.kfs.fp.businessobject.ErrorCertification;
++
++public class GeneralErrorCorrectionDocument extends org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument {
++    private ErrorCertification errorCertification;
++    private Integer errorCertID;
++    
++    public GeneralErrorCorrectionDocument() {
++        super();        
++    }
++
++    /**
++     * Gets the errorCertification attribute. 
++     * @return Returns the errorCertification.
++     */
++    public ErrorCertification getErrorCertification() {
++        return errorCertification;
++    }
++
++    /**
++     * Sets the errorCertification attribute value.
++     * @param errorCertification The errorCertification to set.
++     */
++    public void setErrorCertification(ErrorCertification errorCertification) {
++        this.errorCertification = errorCertification;
++    }
++
++    /**
++     * Gets the errorCertID attribute. 
++     * @return Returns the errorCertID.
++     */
++    public Integer getErrorCertID() {
++        return errorCertID;
++    }
++
++    /**
++     * Sets the errorCertID attribute value.
++     * @param errorCertID The errorCertID to set.
++     */
++    public void setErrorCertID(Integer errorCertID) {
++        this.errorCertID = errorCertID;
++        this.errorCertification.setErrorCertID(errorCertID);
++    }
++}

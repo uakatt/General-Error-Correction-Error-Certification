@@ -1,0 +1,455 @@
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 0)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 3144)
+@@ -0,0 +1,206 @@
++/*
++ * Copyright 2009 The Kuali Foundation.
++ * 
++ * Licensed under the Educational Community License, Version 1.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl1.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.fp.document.validation.impl;
++
++import static org.kuali.kfs.sys.KFSPropertyConstants.REFERENCE_NUMBER;
++
++import java.util.Calendar;
++import java.util.Collection;
++import java.util.Date;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++import org.kuali.kfs.coa.businessobject.SubFundGroup;
++import org.kuali.kfs.fp.document.BudgetAdjustmentDocument;
++import org.kuali.kfs.gl.businessobject.Entry;
++import org.kuali.kfs.sys.businessobject.AccountingLineBase;
++import org.kuali.kfs.sys.context.SpringContext;
++import org.kuali.rice.core.util.RiceConstants;
++import org.kuali.rice.kns.document.Document;
++import org.kuali.rice.kns.rules.PromptBeforeValidationBase;
++import org.kuali.rice.kns.service.BusinessObjectService;
++import org.kuali.rice.kns.service.KualiConfigurationService;
++import org.kuali.rice.kns.service.ParameterService;
++import org.kuali.rice.kns.util.GlobalVariables;
++import org.kuali.rice.kns.util.KNSPropertyConstants;
++
++import com.rsmart.kuali.kfs.fp.document.ProcurementCardDocument;
++
++import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
++import edu.arizona.kfs.sys.AZKFSConstants;
++import edu.arizona.kfs.sys.KFSConstants;
++import edu.arizona.kfs.sys.KFSKeyConstants;
++
++public class GeneralErrorCorrectionDocumentPreRules extends PromptBeforeValidationBase {
++    
++    protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralErrorCorrectionDocumentPreRules.class);
++    
++    /**
++     * Will call private methods to examine a GEC Document.
++     * Includes Error Certification Statement for approval by a fiscal officer if appropriate.
++     * @see org.kuali.rice.kns.rules.PromptBeforeValidationBase#doPrompts(org.kuali.rice.kns.document.Document)
++     */
++    @Override
++    public boolean doPrompts(Document document) {
++        boolean preRulesOK = true;
++        
++        GeneralErrorCorrectionDocument gecDocument = (GeneralErrorCorrectionDocument) document;
++        preRulesOK &= errorCertStmtApproved(gecDocument);
++        
++        return preRulesOK;
++    }
++    
++    /**
++     * Calls private methods to determine whether to show Error Certification Statement. 
++     * @param gecDocument
++     * @return false if Error Certification Statement isn't approved; true if Error Certification Statement
++     *  is approved, and by default
++     */
++    private boolean errorCertStmtApproved(GeneralErrorCorrectionDocument gecDocument) {
++        boolean fiscalOfficerNode = checkRouteLevel(gecDocument);
++        boolean parameterTriggered = checkTargetLines(gecDocument);
++        
++        if (fiscalOfficerNode && parameterTriggered) {
++            return showErrorCertStmt();
++        }
++        return true;
++    }
++    
++    /**
++     * This method checks the current route level. If it is at the "Account" route node, then the fiscal officer
++     * is looking at the GEC. 
++     * @return true if it's at the "Account" route note; false otherwise
++     */
++    private boolean checkRouteLevel(GeneralErrorCorrectionDocument gecDocument) {
++        String currNode = gecDocument.getDocumentHeader().getWorkflowDocument().getCurrentRouteNodeNames();
++        LOG.debug("checkRouteLevel currNode: " + currNode);
++        if (currNode.equals(org.kuali.kfs.sys.KFSConstants.RouteLevelNames.ACCOUNT)) {
++            return true;
++        }
++        
++        return false;
++    }
++    
++    /**
++     * This method iterates through the target accounting lines to examine the original transaction date,
++     * the sub funds, and the EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter. 
++     * @param gecDocument
++     * @return true if there is a transaction that contains the sub fund in the parameter and the original 
++     * transaction is older than the number of days in the parameter; false otherwise 
++     */
++    private boolean checkTargetLines(GeneralErrorCorrectionDocument gecDocument) {
++        List<AccountingLineBase> acctLines = gecDocument.getTargetAccountingLines();
++        Date originalDate;
++        String paramDays;
++        Integer daysFromParameter;
++        Calendar cal;
++        Date dateForComparison;
++
++        try {
++            for (AccountingLineBase currLine : (List<AccountingLineBase>) acctLines) {                
++                paramDays = checkCurrentSubFund(currLine);
++
++                if (paramDays != null) {
++                    LOG.debug("paramDays: " + paramDays);
++                    originalDate = getOriginalTransactionDate(currLine);
++                    LOG.debug("transaction date: " + originalDate);
++                    
++                    daysFromParameter = new Integer(paramDays);
++                    cal = Calendar.getInstance();
++                    cal.add(cal.DATE, -daysFromParameter);
++                    dateForComparison = cal.getTime();
++                    LOG.debug("dateForComparison: " + dateForComparison);
++                
++                    if (originalDate.before(dateForComparison)) {
++                        return true;
++                    }
++                }
++            }
++            return false;
++        }
++        catch (EntryNotFoundException e) {
++            GlobalVariables.getErrorMap().putError(REFERENCE_NUMBER, KFSKeyConstants.ERROR_GEC_REF_NUMBER_INVALID, e.getCriteria().get(KNSPropertyConstants.DOCUMENT_NUMBER));
++            LOG.debug("checkTargetLines failed", e);
++            return false;
++        }
++    }
++
++    /**
++     * Gets original transaction date of given accounting line. Uses reference number. 
++     * The original transaction's FDOC_NBR = accounting line's reference number.
++     * @return original transaction's date
++     * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
++     */
++    protected Date getOriginalTransactionDate(AccountingLineBase currentLine) throws EntryNotFoundException {
++        Map criteria = new HashMap();
++        criteria.put(KNSPropertyConstants.DOCUMENT_NUMBER, currentLine.getReferenceNumber());
++        
++        Collection<Entry> results = getBusinessObjectService().findMatching(Entry.class, criteria);
++        if (results.size() == 0) {
++            throw new EntryNotFoundException(criteria);   
++        }
++                
++        for (Entry entry : results) {            
++            return entry.getTransactionDate();
++        }
++        
++        return new Date();  // dummy return to pass compiler
++    }
++    
++    /**
++     * This method checks the sub fund associated with the account in an accounting line.
++     * @param currLine
++     * @return number of days from EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter if it contains
++     * the sub fund in the currLine; null of no match
++     * 
++     * @throws EntryNotFoundException
++     */
++    protected String checkCurrentSubFund(AccountingLineBase currentLine) throws EntryNotFoundException {        
++        SubFundGroup subFundGroup = currentLine.getAccount().getSubFundGroup();
++        return getParameterService().getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, subFundGroup.getSubFundGroupCode());
++    }    
++    
++    /**
++     * Shows the Error Certification Statement and returns the result.
++     * @return true if the Error Certification Statement returns a "Yes"; false otherwise
++     */
++    private boolean showErrorCertStmt() {
++        String questionText = SpringContext.getBean(KualiConfigurationService.class).getPropertyString(KFSKeyConstants.QUESTION_ERROR_CERTIFICATION_STMT);
++        boolean approved = super.askOrAnalyzeYesNoQuestion(KFSConstants.GeneralErrorCorrectionDocumentConstants.GENERATE_ERROR_CERTIFICATION_STMT_ID, questionText);
++
++        if (!approved) {
++            super.event.setActionForwardName(RiceConstants.MAPPING_BASIC);
++        }
++        return approved;
++    }
++    
++    /**
++     * Gets the parameterService attribute. 
++     * @return Returns the parameterService.
++     */
++    public ParameterService getParameterService() {
++        return SpringContext.getBean(ParameterService.class);
++    }
++    
++    /**
++     * Gets the BO service.
++     * @return BusinessObjectService
++     */
++    public BusinessObjectService getBusinessObjectService() {
++        return  SpringContext.getBean(BusinessObjectService.class);
++    }    
++}
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 3143)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 3144)
+@@ -29,12 +29,17 @@
+ import org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent;
+ import org.kuali.rice.kns.service.BusinessObjectService;
+ import org.kuali.rice.kns.service.ParameterService;
++import org.kuali.rice.kns.service.ParameterConstants.COMPONENT;
++import org.kuali.rice.kns.service.ParameterConstants.NAMESPACE;
+ import org.kuali.rice.kns.util.GlobalVariables;
++import org.kuali.rice.kns.util.KNSPropertyConstants;
+ 
+ import static org.kuali.kfs.sys.KFSPropertyConstants.REFERENCE_NUMBER;
+ 
+ import edu.arizona.kfs.sys.AZKFSConstants;
+ 
++@NAMESPACE(namespace="KFS-FP")
++@COMPONENT(component="GeneralErrorCorrection")
+ public class GeneralErrorCorrectionRefNumberValidation extends GenericValidation {
+     private ParameterService parameterService;
+     private BusinessObjectService businessObjectService;
+@@ -65,7 +70,8 @@
+     
+     /** 
+      * Checks to see if the reference number on an accounting line matches a record in GL_ENTRY_T.
+-     * @return boolean
++     * Prints error if no match.
++     * @return boolean true if matching entry is found; false otherwise
+      */
+     protected boolean isRefNumValid() {
+         Collection matchingEntry = getRefNumberMatch();
+@@ -88,8 +94,7 @@
+         LOG.debug("ref num: " + accountingLineForValidation.getReferenceNumber());
+         
+         Map criteria = new HashMap();
+-        criteria.put("documentNumber", accountingLineForValidation.getReferenceNumber());
+-        
++        criteria.put(KNSPropertyConstants.DOCUMENT_NUMBER, accountingLineForValidation.getReferenceNumber());
+         Collection results = getBusinessObjectService().findMatching(Entry.class, criteria);
+         LOG.debug("results: " + results);
+         
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/ErrorCertificationValidation.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/ErrorCertificationValidation.java	(revision 3143)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/ErrorCertificationValidation.java	(revision 3144)
+@@ -16,12 +16,34 @@
+ package edu.arizona.kfs.fp.document.validation.impl;
+ 
+ import org.apache.commons.lang.StringUtils;
++import org.kuali.kfs.sys.document.validation.GenericValidation;
++import org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent;
++import org.kuali.rice.kns.util.GlobalVariables;
+ 
+ import edu.arizona.kfs.fp.businessobject.ErrorCertification;
+ import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
++import edu.arizona.kfs.sys.KFSConstants;
++import edu.arizona.kfs.sys.KFSKeyConstants;
+ 
+-public class ErrorCertificationValidation {
++public class ErrorCertificationValidation extends GenericValidation {
++    private static int NUM_ERROR_CERT_FIELDS = 4;
+     
++    protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ErrorCertificationValidation.class);
++    
++    public boolean validate(AttributedDocumentEvent event) {
++        GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
++        int numBlankFields = errorCertificationBlankFieldsCheck(currDocument);
++        LOG.debug("numBlankFields: " + numBlankFields);
++        
++        // if Error Certification tab is partially filled out
++        if ((numBlankFields > 1) && (numBlankFields < KFSConstants.ErrorCertificationConstants.NUM_ERROR_CERT_FIELDS)) {
++            GlobalVariables.getErrorMap().putErrorForSectionId("document.errorCertification", KFSKeyConstants.ERROR_ERROR_CERT_FIELDS_REQ, "error.errorCert.fieldsReq");
++            return false;
++        }
++        
++        return true;
++    }
++    
+     /**
+      * This method goes through all the Error Certification fields looking for blank fields.
+      * @param document
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 3143)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 3144)
+@@ -44,21 +44,21 @@
+ 
+ import edu.arizona.kfs.fp.businessobject.ErrorCertification;
+ import edu.arizona.kfs.sys.AZKFSConstants;
++import edu.arizona.kfs.sys.KFSConstants;
+ import edu.arizona.kfs.sys.KFSKeyConstants;
+ 
+ public class GeneralErrorCorrectionErrorCertificationValidation extends GenericValidation {
+     private ParameterService parameterService;
+     private BusinessObjectService businessObjectService;
+     private AccountingLineBase accountingLineForValidation;
+-    private static int NUM_ERROR_CERT_FIELDS = 4;
+-    
++        
+     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralErrorCorrectionErrorCertificationValidation.class);
+     
+     /** 
+      * @see org.kuali.kfs.sys.document.validation.Validation#validate(org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent)
+      */
+     public boolean validate(AttributedDocumentEvent event) {
+-        LOG.info("validate error certification tab called");
++        LOG.debug("validate error certification tab called");
+         GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
+         
+         boolean success = true;
+@@ -71,43 +71,37 @@
+         try {
+             acctLines = currDocument.getSourceAccountingLines();
+             daysCheck = defaultNumberOfDaysCheck(acctLines, checkSubFund);
+-            LOG.info("daysCheck for source accounting lines: " + daysCheck);
++            LOG.debug("daysCheck for source accounting lines: " + daysCheck);
+             
+             // if all source accounting lines are younger than the days specified in the parameter, check target accounting lines
+             if (daysCheck) {
+                 acctLines = currDocument.getTargetAccountingLines();
+                 checkSubFund = true;
+                 daysCheck = defaultNumberOfDaysCheck(acctLines, checkSubFund);
+-                LOG.info("daysCheck for target accounting lines: " + daysCheck);
++                LOG.debug("daysCheck for target accounting lines: " + daysCheck);
+             }
+         }
+         catch (EntryNotFoundException e) {
+             GlobalVariables.getErrorMap().putError(REFERENCE_NUMBER, KFSKeyConstants.ERROR_GEC_REF_NUMBER_INVALID, e.getCriteria().get(KNSPropertyConstants.DOCUMENT_NUMBER));
+-            LOG.info("defaultNumberOfDaysCheck failed", e);
++            LOG.debug("defaultNumberOfDaysCheck failed", e);
+             success = false;
+         }
+         
+         // check for blank fields in the Error Certification Tab
+         ErrorCertificationValidation ecValidation = new ErrorCertificationValidation();
+         numBlankFields = ecValidation.errorCertificationBlankFieldsCheck(currDocument);
+-        LOG.info("numBlankFields: " + numBlankFields);
++        LOG.debug("numBlankFields: " + numBlankFields);
+         
+-        // if there is a transaction older than DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED and at least one blank field
+-        if ((daysCheck == false) && (numBlankFields > 1)) {
+-            GlobalVariables.getErrorMap().putErrorForSectionId("error.errorcert.*", KFSKeyConstants.ERROR_ERROR_CERT_FIELDS_REQ, "error.errorcert.fieldsreq");
++        // if there is a transaction older than DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED and Error Certification tab is partially filled
++        if ((daysCheck == false) && ((numBlankFields > 1) && (numBlankFields <= KFSConstants.ErrorCertificationConstants.NUM_ERROR_CERT_FIELDS))) {
++            GlobalVariables.getErrorMap().putErrorForSectionId("document.errorCertification", KFSKeyConstants.ERROR_ERROR_CERT_DATE_PARAM_TRIGGERED, "error.errorCert.dateParamTriggered");
+         }
+-      
+-        // make else if?
+-        // if at least one but not all Error Cert fields are filled out
+-        if ((numBlankFields > 1) && (numBlankFields < NUM_ERROR_CERT_FIELDS)) {
+-            GlobalVariables.getErrorMap().putErrorForSectionId("error.errorcert.*", KFSKeyConstants.ERROR_ERROR_CERT_FIELDS_REQ, "error.errorcert.fieldsreq");
+-        }
+ 
+         return success;
+     }
+ 
+     /**
+-     * Determines if the error certification tab is filled out properly based on the age of the transactions.
++     * Determines if the age of the referenced transactions are older than the value in the parameter.
+      * If checking source accounting lines, use the days in the
+      *  DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED parameter.
+      * If checking target accounting lines, check account's sub fund and maybe use
+@@ -130,13 +124,13 @@
+ 
+         for (AccountingLineBase currLine : (List<AccountingLineBase>) accountingLines) {
+             originalDate = getOriginalTransactionDate(currLine);            
+-            LOG.info("transaction date: " + originalDate);
++            LOG.debug("transaction date: " + originalDate);
+             
+             // if target line, check sub fund associated with the account on the original doc
+             if (checkSubFund) {
+                 daysFromParameter = checkCurrentSubFund(daysFromParameter, currLine);
+             }
+-            LOG.info("daysFromParameter: " + daysFromParameter);
++            LOG.debug("daysFromParameter: " + daysFromParameter);
+        
+             Calendar cal = Calendar.getInstance();
+             cal.add(cal.DATE, -daysFromParameter);
+@@ -180,7 +174,7 @@
+      * @throws EntryNotFoundException
+      */
+     protected Integer checkCurrentSubFund(Integer daysFromParameter, AccountingLineBase currLine) throws EntryNotFoundException {
+-        LOG.info("in checkCurrentSubFund");
++        LOG.debug("in checkCurrentSubFund");
+         SubFundGroup subFundGroup = currLine.getAccount().getSubFundGroup();        
+         String newCompareDate = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, subFundGroup.getSubFundGroupCode());
+                         
+Index: work/src/edu/arizona/kfs/fp/document/validation/configuration/FinancialProcessingValidators.xml
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/configuration/FinancialProcessingValidators.xml	(revision 3143)
++++ work/src/edu/arizona/kfs/fp/document/validation/configuration/FinancialProcessingValidators.xml	(revision 3144)
+@@ -1,27 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<!--
+- Copyright 2005-2007 The Kuali Foundation.
+- 
+- Licensed under the Educational Community License, Version 1.0 (the "License");
+- you may not use this file except in compliance with the License.
+- You may obtain a copy of the License at
+- 
+- http://www.opensource.org/licenses/ecl1.php
+- 
+- Unless required by applicable law or agreed to in writing, software
+- distributed under the License is distributed on an "AS IS" BASIS,
+- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- See the License for the specific language governing permissions and
+- limitations under the License.
+--->
+-<beans xmlns="http://www.springframework.org/schema/beans"
+-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-    xmlns:p="http://www.springframework.org/schema/p"
+-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+-        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+-        
+-	<bean id="GeneralErrorCorrection-errorCertificationValidation" class="edu.arizona.kfs.fp.document.validation.impl.GeneralErrorCorrectionErrorCertificationValidation" abstract="true">
+-		<property name="parameterService" ref="parameterService" />
+-	</bean>
+-	
+-</beans>
+\ No newline at end of file
+Index: work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml	(revision 3143)
++++ work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml	(revision 3144)
+@@ -23,7 +23,8 @@
+   	<bean id="GeneralErrorCorrection-routeDocumentValidation" parent="GeneralErrorCorrection-routeDocumentValidation-parentBean" scope="prototype">
+   		<property name="validations">
+   			<list merge="true">
+-  				<bean parent="GeneralErrorCorrection-errorCertificationValidation" scope="prototype" />  				
++  				<bean parent="GeneralErrorCorrection-errorCertificationValidation" scope="prototype" />
++  				<bean parent="GeneralErrorCorrection-errorCertificationTabValidation" scope="prototype" />  				
+   			</list>
+   		</property>  		
+   	</bean>
+@@ -80,4 +81,8 @@
+ 		<property name="businessObjectService" ref="businessObjectService" />
+ 	</bean>
+ 
++	<bean id="GeneralErrorCorrection-errorCertificationTabValidation" scope="prototype" parent="GeneralErrorCorrection-errorCertificationTabValidation-parentBean" />
++
++	<bean id="GeneralErrorCorrection-errorCertificationTabValidation-parentBean" class="edu.arizona.kfs.fp.document.validation.impl.ErrorCertificationValidation" abstract="true" />
++
+ </beans>

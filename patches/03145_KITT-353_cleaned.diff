@@ -1,0 +1,54 @@
+Index: work/src/edu/arizona/kfs/sys/KFSConstants.java
+===================================================================
+--- work/src/edu/arizona/kfs/sys/KFSConstants.java	(revision 0)
++++ work/src/edu/arizona/kfs/sys/KFSConstants.java	(revision 3145)
+@@ -0,0 +1,34 @@
++/*
++ * Copyright 2009 The Kuali Foundation.
++ * 
++ * Licensed under the Educational Community License, Version 1.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl1.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.sys;
++
++import org.kuali.kfs.sys.ParameterKeyConstants;
++import org.kuali.rice.core.util.JSTLConstants;
++
++/**
++ * This class is used to define global constants.
++ */
++public class KFSConstants extends JSTLConstants implements ParameterKeyConstants {
++
++    
++    public static class GeneralErrorCorrectionDocumentConstants {     
++        public static final String GENERATE_ERROR_CERTIFICATION_STMT_ID = "GenerateErrorCertStmt";
++    }
++    
++    public static class ErrorCertificationConstants {
++        public static final int NUM_ERROR_CERT_FIELDS = 4;        
++    }
++}
+Index: work/src/edu/arizona/kfs/sys/KFSKeyConstants.java
+===================================================================
+--- work/src/edu/arizona/kfs/sys/KFSKeyConstants.java	(revision 3144)
++++ work/src/edu/arizona/kfs/sys/KFSKeyConstants.java	(revision 3145)
+@@ -33,6 +33,9 @@
+     //Account Assession Code Errors
+     public static final String ERROR_ACCOUNT_EXTENDED_ATTR_INVALID_DATA = "error.common.validation.alphanumeric";//KITT-200
+ 
++    // GEC Errors and Message
+     public static final String ERROR_GEC_REF_NUMBER_INVALID = "error.gec.ref.number";
+-    public static final String ERROR_ERROR_CERT_FIELDS_REQ = "error.errorcert.fieldsreq";
++    public static final String ERROR_ERROR_CERT_DATE_PARAM_TRIGGERED = "error.errorCert.dateParamTriggered";
++    public static final String ERROR_ERROR_CERT_FIELDS_REQ = "error.errorCert.fieldsReq";
++    public static final String QUESTION_ERROR_CERTIFICATION_STMT = "question.gec.errorCertStmt";
+ }

@@ -1,0 +1,27 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml	(revision 3014)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml	(revision 3015)
+@@ -25,7 +25,7 @@
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+ 
+-    <bean id="fpModuleConfiguration-Extension" parent="rsmartFpModuleConfiguration-parentBean">	
++    <bean id="fpModuleConfiguration-Extension" parent="fpModuleConfiguration-parentBean">	
+     	<property name="namespaceCode" value="KFS-FP" />
+         <property name="packagePrefixes">
+ 			<list merge="true">
+@@ -33,9 +33,10 @@
+ 			</list>
+ 		</property>
+ 		<property name="dataDictionaryPackages">
+-		    <list merge="true">			   
+-                        <value>edu/arizona/kfs/fp/document/datadictionary</value>
+-                    </list>
++		    <list merge="true">
++		    	<value>edu/arizona/kfs/fp/businessobject/datadictionary</value>
++		    	<value>edu/arizona/kfs/fp/document/datadictionary</value>
++            </list>
+ 		</property>
+ 		<property name="databaseRepositoryFilePaths">
+ 			<list merge="true">

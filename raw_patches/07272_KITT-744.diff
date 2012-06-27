@@ -1,0 +1,10 @@
+Index: financial-system/kfs-cfg-dbs/trunk/update.xml
+===================================================================
+--- financial-system/kfs-cfg-dbs/trunk/update.xml	(revision 7271)
++++ financial-system/kfs-cfg-dbs/trunk/update.xml	(revision 7272)
+@@ -4,4 +4,5 @@
+                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+ 	<include file="update/KITT-592.xml" />
+ 	<include file="update/KITT-473.xml" />
++	<include file="update/KITT-744.xml" />
+ </databaseChangeLog>

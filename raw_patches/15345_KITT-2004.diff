@@ -1,0 +1,160 @@
+Index: financial-system/kfs/trunk/test/unit/src/edu/arizona/kfs/fp/document/validation/GECErrorCertificationValidationTest.java
+===================================================================
+--- financial-system/kfs/trunk/test/unit/src/edu/arizona/kfs/fp/document/validation/GECErrorCertificationValidationTest.java	(revision 15344)
++++ financial-system/kfs/trunk/test/unit/src/edu/arizona/kfs/fp/document/validation/GECErrorCertificationValidationTest.java	(revision 15345)
+@@ -61,6 +61,7 @@
+         // create source accounting line
+         SourceAccountingLine sourceAccountingLine = new SourceAccountingLine();
+         sourceAccountingLine.setReferenceNumber("111111");
++        sourceAccountingLine.setReferenceOriginCode("01");
+         
+         gecDocument.addSourceAccountingLine(sourceAccountingLine);
+         
+@@ -80,6 +81,7 @@
+         // create source accounting line
+         SourceAccountingLine sourceAccountingLine = new SourceAccountingLine();
+         sourceAccountingLine.setReferenceNumber("111111");
++        sourceAccountingLine.setReferenceOriginCode("01");
+         
+         gecDocument.addSourceAccountingLine(sourceAccountingLine);
+         
+@@ -99,6 +101,7 @@
+         // create source accounting line
+         SourceAccountingLine sourceAccountingLine = new SourceAccountingLine();
+         sourceAccountingLine.setReferenceNumber("111111");
++        sourceAccountingLine.setReferenceOriginCode("01");
+         
+         gecDocument.addSourceAccountingLine(sourceAccountingLine);
+         
+@@ -123,6 +126,7 @@
+         // create target accounting line
+         TargetAccountingLine targetAccountingLine = new TargetAccountingLine();
+         targetAccountingLine.setReferenceNumber("111111");
++        targetAccountingLine.setReferenceOriginCode("01");
+         targetAccountingLine.setAccount(account);
+         
+         gecDocument.addTargetAccountingLine(targetAccountingLine);
+@@ -148,6 +152,7 @@
+         // create target accounting line
+         TargetAccountingLine targetAccountingLine = new TargetAccountingLine();
+         targetAccountingLine.setReferenceNumber("111111");
++        targetAccountingLine.setReferenceOriginCode("01");
+         targetAccountingLine.setAccount(account);
+         
+         gecDocument.addTargetAccountingLine(targetAccountingLine);
+@@ -173,6 +178,7 @@
+         // create target accounting line
+         TargetAccountingLine targetAccountingLine = new TargetAccountingLine();
+         targetAccountingLine.setReferenceNumber("111111");
++        targetAccountingLine.setReferenceOriginCode("01");
+         targetAccountingLine.setAccount(account);
+         
+         gecDocument.addTargetAccountingLine(targetAccountingLine);
+@@ -198,6 +204,7 @@
+         // create target accounting line
+         TargetAccountingLine targetAccountingLine = new TargetAccountingLine();
+         targetAccountingLine.setReferenceNumber("111111");
++        targetAccountingLine.setReferenceOriginCode("01");
+         targetAccountingLine.setAccount(account);
+         
+         gecDocument.addTargetAccountingLine(targetAccountingLine);
+@@ -225,6 +232,7 @@
+             Entry fakeEntry = new Entry();
+             fakeEntry.setTransactionDate(new Date(cal.getTimeInMillis()));
+             fakeEntry.setDocumentNumber("111111");
++            fakeEntry.setFinancialSystemOriginationCode("01");
+             LOG.debug("original older date: " + df.format(cal.getTimeInMillis()));
+             
+             Collection<Entry> entryCollection = new ArrayList();  
+@@ -248,6 +256,7 @@
+             Entry fakeEntry = new Entry();
+             fakeEntry.setTransactionDate(new Date(cal.getTimeInMillis()));
+             fakeEntry.setDocumentNumber("111111");
++            fakeEntry.setFinancialSystemOriginationCode("01");
+             LOG.debug("original newer date: " + df.format(cal.getTimeInMillis()));
+             
+             Collection<Entry> entryCollection = new ArrayList();  
+Index: financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties
+===================================================================
+--- financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties	(revision 15344)
++++ financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties	(revision 15345)
+@@ -2,7 +2,7 @@
+ error.document.pch.invalidGroupName = {0} is an invalid group name.
+ 
+ # GEC Messages
+-error.gec.ref.number = Reference number entered does not correspond to an existing GL transaction.
++error.gec.ref.number = Reference number entered does not correspond to an existing GL transaction for the identified Reference Origin Code.
+ question.gec.errorCertStmt = I hereby certify that these expenses were incurred for the goals, objectives, and benefit of grant/contract, and that the expenditure transfer is correct and proper.  In the event of a subsequent audit disallowance of this expense transfer for any reason, the Principal Investigator/Fiscal Officer and Department Head agree to be jointly responsible for handling this expense in a manner which is consistent with UA policy.
+ 
+ # AssetAwardHistory Messages
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 15344)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 15345)
+@@ -22,6 +22,8 @@
+ import org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument;
+ import org.kuali.kfs.gl.businessobject.Entry;
+ import edu.arizona.kfs.sys.KFSKeyConstants;
++
++import org.kuali.kfs.sys.KFSPropertyConstants;
+ import org.kuali.kfs.sys.businessobject.AccountingLine;
+ import org.kuali.kfs.sys.businessobject.AccountingLineBase;
+ import org.kuali.kfs.sys.context.SpringContext;
+@@ -69,7 +71,7 @@
+     }
+     
+     /** 
+-     * Checks to see if the reference number on an accounting line matches a record in GL_ENTRY_T.
++     * Checks to see if the reference number and origination code on an accounting line matches a record in GL_ENTRY_T.
+      * Prints error if no match.
+      * @return boolean true if matching entry is found; false otherwise
+      */
+@@ -87,14 +89,17 @@
+     
+     /**
+      * 
+-     * This method tries to fetch a record in GL_ENTRY_T that has a FDOC_NBR = reference number entered.
++     * This method tries to fetch a record in GL_ENTRY_T that has a FDOC_NBR = reference number
++     * and a FS_ORIGIN_CD = reference origin code entered.
+      * @return Collection representing the matching GL entry
+      */
+     protected Collection getRefNumberMatch() {
+         LOG.debug("ref num: " + accountingLineForValidation.getReferenceNumber());
++        LOG.debug("origin code: " + accountingLineForValidation.getReferenceOriginCode());
+         
+         Map criteria = new HashMap();
+         criteria.put(KNSPropertyConstants.DOCUMENT_NUMBER, accountingLineForValidation.getReferenceNumber());
++        criteria.put(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, accountingLineForValidation.getReferenceOriginCode());
+         Collection results = getBusinessObjectService().findMatching(Entry.class, criteria);
+         LOG.debug("results: " + results);
+         
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 15344)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 15345)
+@@ -150,20 +150,23 @@
+     }
+     
+     /**
+-     * Gets original transaction date of given accounting line. Uses reference number. 
++     * Gets original transaction date of given accounting line. Uses reference number and reference origin code. 
+      * The original transaction's FDOC_NBR = accounting line's reference number.
++     * The original transaction's FS_ORIGIN_CD = accounting line's reference origin code.
+      * @return original transaction's date
+      * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
+      */
+     protected Date getOriginalTransactionDate(AccountingLineBase currentLine) throws EntryNotFoundException {
+         Map criteria = new HashMap();
+         criteria.put(KNSPropertyConstants.DOCUMENT_NUMBER, currentLine.getReferenceNumber());
++        criteria.put(KFSPropertyConstants.FINANCIAL_SYSTEM_ORIGINATION_CODE, currentLine.getReferenceOriginCode());
+         
+         Collection<Entry> results = getBusinessObjectService().findMatching(Entry.class, criteria);
+-        if (results.size() == 0) {
++        if ((results == null) || (results.size() == 0)) {
+             throw new EntryNotFoundException(criteria);   
+         }
+                 
++        // Collection will return more than one GL entry, so get the first one.
+         for (Entry entry : results) {            
+             return entry.getTransactionDate();
+         }

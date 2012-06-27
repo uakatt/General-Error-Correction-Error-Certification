@@ -1,0 +1,57 @@
+Index: financial-system/kfs/branches/3.0/work/db/scripts/arizona/data.sql
+===================================================================
+--- financial-system/kfs/branches/3.0/work/db/scripts/arizona/data.sql	(revision 7237)
++++ financial-system/kfs/branches/3.0/work/db/scripts/arizona/data.sql	(revision 7238)
+@@ -63,6 +63,26 @@
+ (APPL_NMSPC_CD,NMSPC_CD, PARM_DTL_TYP_CD, PARM_NM, OBJ_ID, VER_NBR, TXT, PARM_DESC_TXT, PARM_TYP_CD, CONS_CD)
+ VALUES ('KFS', 'KFS-SYS', 'All', 'BI_REPORT_URL', SYS_GUID(), 1, 'http://bi.mosaic.arizona.edu/dev', 'The URL for UAccess Analytics', 'CONFG', 'A');
+ 
++INSERT INTO KRNS_PARM_T 
++(APPL_NMSPC_CD, NMSPC_CD, PARM_DTL_TYP_CD, PARM_NM, OBJ_ID, VER_NBR, TXT, PARM_DESC_TXT, PARM_TYP_CD, CONS_CD)
++VALUES ('KFS', 'KFS-LD', 'YearEndSalaryExpenseTransfer', 'DEFAULT_NUMBER_OF_FISCAL_PERIODS_ERROR_CERTIFICATION_TAB_REQUIRED', SYS_GUID(), 1, '3', 'Defines the default number of fiscal periods that will require that the Error Certification tab be completed. If the fiscal period of the transaction exceeds the current fiscal period by more than the default, the Error Certification tab is required.', 'VALID', 'A');
++
++INSERT INTO KRNS_PARM_T 
++(APPL_NMSPC_CD, NMSPC_CD, PARM_DTL_TYP_CD, PARM_NM, OBJ_ID, VER_NBR, TXT, PARM_DESC_TXT, PARM_TYP_CD, CONS_CD)
++VALUES ('KFS', 'KFS-LD', 'YearEndSalaryExpenseTransfer', 'ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND', SYS_GUID(), 1, 'FEDSUB=1', 'Specific sub-fund groups that are excepted from the DEFAULT_NUMBER_OF_FISCAL_PERIODS_ERROR_CERTIFICATION_TAB_REQUIRED parameter. If the account used on the TO side includes sub-funds specified in this parameter, the number of fiscal periods associated with the sub fund should be used instead of the default to determine whether or not the Error Certification tab is required. Format of list is sub fund 1=number of fiscal periods; sub fund 2=number of fiscal periods.', 'VALID', 'A');
++
++INSERT INTO KRNS_PARM_T 
++(APPL_NMSPC_CD, NMSPC_CD, PARM_DTL_TYP_CD, PARM_NM, OBJ_ID, VER_NBR, TXT, PARM_DESC_TXT, PARM_TYP_CD, CONS_CD)
++VALUES ('KFS','KFS-FP', 'YearEndGeneralErrorCorrection', 'DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED', SYS_GUID(), 1, '90', 'Defines the default number of days that will require that the Error Certification tab be completed. If the transaction is older than the default the Error Certification tab is required.', 'VALID', 'A');
++
++INSERT INTO KRNS_PARM_T 
++(APPL_NMSPC_CD, NMSPC_CD, PARM_DTL_TYP_CD, PARM_NM, OBJ_ID, VER_NBR, TXT, PARM_DESC_TXT, PARM_TYP_CD, CONS_CD)
++VALUES ('KFS', 'KFS-FP', 'YearEndGeneralErrorCorrection', 'ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND', SYS_GUID(), 1, 'FEDSUB=30', 'Specific sub-fund groups that are excepted from the DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED parameter. If the account used on the TO side includes sub-funds specified in this parameter, the number of days associated with the subfund should be used instead of the default to determine whether or not the Error Certification tab is required. Format of list is sub fund 1=number of days; sub fund 2=number of days.', 'VALID', 'A');
++
++INSERT INTO KRNS_PARM_T 
++(APPL_NMSPC_CD, NMSPC_CD, PARM_DTL_TYP_CD, PARM_NM, OBJ_ID, VER_NBR, TXT, PARM_DESC_TXT, PARM_TYP_CD, CONS_CD)
++VALUES ('KFS', 'KFS-FP', 'YearEndGeneralErrorCorrection', 'REFERENCE_NUMBER_VALIDATION_IND', SYS_GUID(), 1, 'Y', 'Indicator to turn the reference number validation on/off on the Year End General Error Correction.', 'CONFG', 'A');
++
+ declare 
+ ktyp_id krim_typ_t.kim_typ_id%TYPE;
+ krole_id krim_role_t.role_id%TYPE;
+@@ -426,23 +446,4 @@
+ update krim_rsp_attr_data_t set attr_val = 'KualiDocument' where rsp_id = '1' and kim_attr_defn_id = '13' 
+ 
+ -- KITT-712: parameter update for DV address population for employees
+-update krns_parm_t set txt = 'WRK' where nmspc_cd = 'KFS-FP' and parm_dtl_typ_cd = 'DisbursementVoucher' and parm_nm = 'DEFAULT_EMPLOYEE_ADDRESS_TYPE'
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++update krns_parm_t set txt = 'WRK' where nmspc_cd = 'KFS-FP' and parm_dtl_typ_cd = 'DisbursementVoucher' and parm_nm = 'DEFAULT_EMPLOYEE_ADDRESS_TYPE'
+\ No newline at end of file

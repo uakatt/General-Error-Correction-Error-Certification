@@ -1,0 +1,14 @@
+Index: financial-system/kfs/trunk/work/web-root/jsp/fp/YearEndGeneralErrorCorrection.jsp
+===================================================================
+--- financial-system/kfs/trunk/work/web-root/jsp/fp/YearEndGeneralErrorCorrection.jsp	(revision 6862)
++++ financial-system/kfs/trunk/work/web-root/jsp/fp/YearEndGeneralErrorCorrection.jsp	(revision 6863)
+@@ -31,6 +31,9 @@
+ 
+ 	<c:set var="readOnly" value="${!KualiForm.documentActions[Constants.KUALI_ACTION_CAN_EDIT]}" />
+ 	<fp:capitalAssetEditTab readOnly="${readOnly}"/>
++
++    <fp:errorCertification
++        documentAttributes="${DataDictionary.ErrorCertification.attributes}" />
+ 	
+ 	<gl:generalLedgerPendingEntries />
+ 

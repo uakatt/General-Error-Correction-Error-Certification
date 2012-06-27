@@ -1,0 +1,10 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSKeyConstants.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSKeyConstants.java	(revision 3017)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/sys/KFSKeyConstants.java	(revision 3018)
+@@ -34,4 +34,5 @@
+     public static final String ERROR_ACCOUNT_EXTENDED_ATTR_INVALID_DATA = "error.common.validation.alphanumeric";//KITT-200
+ 
+     public static final String ERROR_GEC_REF_NUMBER_INVALID = "error.gec.ref.number";
++    public static final String ERROR_ERROR_CERT_FIELDS_REQ = "error.errorcert.fieldsreq";
+ }

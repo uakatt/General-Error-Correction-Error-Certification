@@ -1,0 +1,226 @@
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 4752)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 4753)
+@@ -41,13 +41,14 @@
+ import com.rsmart.kuali.kfs.fp.document.ProcurementCardDocument;
+ 
+ import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
++import edu.arizona.kfs.module.ld.document.validation.impl.SalaryExpenseTransferErrorCertificationValidation;
+ import edu.arizona.kfs.sys.AZKFSConstants;
+ import edu.arizona.kfs.sys.KFSConstants;
+ import edu.arizona.kfs.sys.KFSKeyConstants;
+ 
+ public class GeneralErrorCorrectionDocumentPreRules extends PromptBeforeValidationBase {
+-    
+     protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralErrorCorrectionDocumentPreRules.class);
++    private GeneralErrorCorrectionErrorCertificationValidation gecErrorCertificationValidationService;
+     
+     /**
+      * Will call private methods to examine a GEC Document.
+@@ -72,8 +73,16 @@
+      */
+     private boolean errorCertStmtApproved(GeneralErrorCorrectionDocument gecDocument) {
+         boolean fiscalOfficerNode = checkRouteLevel(gecDocument);
+-        boolean parameterTriggered = checkTargetLines(gecDocument);
++        boolean parameterTriggered = false;
+         
++        try {
++            parameterTriggered = checkTargetLines(gecDocument);
++        }
++        catch (EntryNotFoundException e) {
++            GlobalVariables.getErrorMap().putError(REFERENCE_NUMBER, KFSKeyConstants.ERROR_GEC_REF_NUMBER_INVALID, e.getCriteria().get(KNSPropertyConstants.DOCUMENT_NUMBER));
++            LOG.debug("checkTargetLines failed", e);
++        }
++        
+         if (fiscalOfficerNode && parameterTriggered) {
+             return showErrorCertStmt();
+         }
+@@ -87,12 +96,11 @@
+      */
+     private boolean checkRouteLevel(GeneralErrorCorrectionDocument gecDocument) {
+         String currNode = gecDocument.getDocumentHeader().getWorkflowDocument().getCurrentRouteNodeNames();
+-        LOG.debug("checkRouteLevel currNode: " + currNode);
+-        if (currNode.equals(org.kuali.kfs.sys.KFSConstants.RouteLevelNames.ACCOUNT)) {
+-            return true;
++        if (LOG.isDebugEnabled()) {
++            LOG.debug("checkRouteLevel currNode: " + currNode);
+         }
+         
+-        return false;
++        return currNode.equals(org.kuali.kfs.sys.KFSConstants.RouteLevelNames.ACCOUNT);
+     }
+     
+     /**
+@@ -102,79 +110,13 @@
+      * @return true if there is a transaction that contains the sub fund in the parameter and the original 
+      * transaction is older than the number of days in the parameter; false otherwise 
+      */
+-    private boolean checkTargetLines(GeneralErrorCorrectionDocument gecDocument) {
+-        List<AccountingLineBase> acctLines = gecDocument.getTargetAccountingLines();
+-        Date originalDate;
+-        String paramDays;
+-        Integer daysFromParameter;
+-        Calendar cal;
+-        Date dateForComparison;
+-
+-        try {
+-            for (AccountingLineBase currLine : (List<AccountingLineBase>) acctLines) {                
+-                paramDays = checkCurrentSubFund(currLine);
+-
+-                if (paramDays != null) {
+-                    LOG.debug("paramDays: " + paramDays);
+-                    originalDate = getOriginalTransactionDate(currLine);
+-                    LOG.debug("transaction date: " + originalDate);
+-                    
+-                    daysFromParameter = new Integer(paramDays);
+-                    cal = Calendar.getInstance();
+-                    cal.add(cal.DATE, -daysFromParameter);
+-                    dateForComparison = cal.getTime();
+-                    LOG.debug("dateForComparison: " + dateForComparison);
+-                
+-                    if (originalDate.before(dateForComparison)) {
+-                        return true;
+-                    }
+-                }
+-            }
+-            return false;
+-        }
+-        catch (EntryNotFoundException e) {
+-            GlobalVariables.getErrorMap().putError(REFERENCE_NUMBER, KFSKeyConstants.ERROR_GEC_REF_NUMBER_INVALID, e.getCriteria().get(KNSPropertyConstants.DOCUMENT_NUMBER));
+-            LOG.debug("checkTargetLines failed", e);
+-            return false;
+-        }
+-    }
+-
+-    /**
+-     * Gets original transaction date of given accounting line. Uses reference number. 
+-     * The original transaction's FDOC_NBR = accounting line's reference number.
+-     * @return original transaction's date
+-     * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
+-     */
+-    protected Date getOriginalTransactionDate(AccountingLineBase currentLine) throws EntryNotFoundException {
+-        Map criteria = new HashMap();
+-        criteria.put(KNSPropertyConstants.DOCUMENT_NUMBER, currentLine.getReferenceNumber());
++    private boolean checkTargetLines(GeneralErrorCorrectionDocument gecDocument) throws EntryNotFoundException {
++        Integer initialPeriodsFromParameter = null;        
+         
+-        Collection<Entry> results = getBusinessObjectService().findMatching(Entry.class, criteria);
+-        if (results.size() == 0) {
+-            throw new EntryNotFoundException(criteria);   
+-        }
+-                
+-        for (Entry entry : results) {            
+-            return entry.getTransactionDate();
+-        }
+-        
+-        return new Date();  // dummy return to pass compiler
++        return !(getGecErrorCertificationValidationService().defaultNumberOfDaysCheck(gecDocument.getTargetAccountingLines(), initialPeriodsFromParameter, true));       
+     }
+-    
++  
+     /**
+-     * This method checks the sub fund associated with the account in an accounting line.
+-     * @param currLine
+-     * @return number of days from ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter if it contains
+-     * the sub fund in the currLine; null of no match
+-     * 
+-     * @throws EntryNotFoundException
+-     */
+-    protected String checkCurrentSubFund(AccountingLineBase currentLine) throws EntryNotFoundException {        
+-        SubFundGroup subFundGroup = currentLine.getAccount().getSubFundGroup();
+-        return getParameterService().getParameterValue(edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, subFundGroup.getSubFundGroupCode());
+-    }    
+-    
+-    /**
+      * Shows the Error Certification Statement and returns the result.
+      * @return true if the Error Certification Statement returns a "Yes"; false otherwise
+      */
+@@ -202,5 +144,25 @@
+      */
+     public BusinessObjectService getBusinessObjectService() {
+         return  SpringContext.getBean(BusinessObjectService.class);
++    }
++
++    /**
++     * Gets the gecErrorCertificationValidationService attribute. 
++     * @return Returns the gecErrorCertificationValidationService.
++     */
++    public GeneralErrorCorrectionErrorCertificationValidation getGecErrorCertificationValidationService() {
++        if (gecErrorCertificationValidationService == null) {
++            gecErrorCertificationValidationService = SpringContext.getBean(GeneralErrorCorrectionErrorCertificationValidation.class);
++        }
++                
++        return gecErrorCertificationValidationService;
++    }
++
++    /**
++     * Sets the gecErrorCertificationValidationService attribute value.
++     * @param gecErrorCertificationValidationService The gecErrorCertificationValidationService to set.
++     */
++    public void setGecErrorCertificationValidationService(GeneralErrorCorrectionErrorCertificationValidation gecErrorCertificationValidationService) {
++        this.gecErrorCertificationValidationService = gecErrorCertificationValidationService;
+     }    
+ }
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 4752)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 4753)
+@@ -63,6 +63,7 @@
+         LOG.debug("validate error certification tab called");
+         GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
+         String defaultDaysFromParam = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED);
++        Integer daysFromParameter = new Integer(defaultDaysFromParam);
+         
+         boolean success = true;
+         boolean olderThanOriginal = false;
+@@ -73,14 +74,14 @@
+         // check original transaction dates and the system parameters involving age of transaction
+         try {
+             acctLines = currDocument.getSourceAccountingLines();
+-            olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, defaultDaysFromParam, checkSubFund);
++            olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, daysFromParameter, checkSubFund);
+             LOG.debug("olderThanOriginal for source accounting lines: " + olderThanOriginal);
+             
+             // if all source accounting lines are younger than the days specified in the parameter, check target accounting lines
+             if (!olderThanOriginal) {
+                 acctLines = currDocument.getTargetAccountingLines();
+                 checkSubFund = true;
+-                olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, defaultDaysFromParam, checkSubFund);
++                olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, daysFromParameter, checkSubFund);
+                 LOG.debug("olderThanOriginal for target accounting lines: " + olderThanOriginal);
+             }
+         }
+@@ -121,8 +122,7 @@
+      *  parameter; false otherwise
+      * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
+      */
+-    public boolean defaultNumberOfDaysCheck(List<AccountingLineBase> accountingLines, String defaultDays, boolean checkSubFund) throws EntryNotFoundException {
+-        Integer daysFromParameter = new Integer(defaultDays);
++    public boolean defaultNumberOfDaysCheck(List<AccountingLineBase> accountingLines, Integer daysFromParameter, boolean checkSubFund) throws EntryNotFoundException {
+         Date originalDate;
+ 
+         for (AccountingLineBase currentLine : (List<AccountingLineBase>) accountingLines) {
+@@ -135,13 +135,15 @@
+             }
+             LOG.debug("daysFromParameter: " + daysFromParameter);
+        
+-            Calendar cal = Calendar.getInstance();
+-            cal.add(cal.DATE, -daysFromParameter);
+-            Date dateForComparison = cal.getTime();
+-            LOG.debug("dateForComparison: " + dateForComparison);
+-            
+-            if (dateForComparison.after(originalDate)) {
+-                return false;
++            if (daysFromParameter != null) {
++                Calendar cal = Calendar.getInstance();
++                cal.add(cal.DATE, -daysFromParameter);
++                Date dateForComparison = cal.getTime();
++                LOG.debug("dateForComparison: " + dateForComparison);
++                
++                if (dateForComparison.after(originalDate)) {
++                    return false;
++                }
+             }
+         }
+         return true;

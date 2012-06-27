@@ -1,0 +1,150 @@
+Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+===================================================================
+--- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 7239)
++++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 7240)
+@@ -113,7 +113,7 @@
+     private boolean checkTargetLines(GeneralErrorCorrectionDocument gecDocument) throws EntryNotFoundException {
+         Integer initialPeriodsFromParameter = null;        
+         
+-        return !(getGecErrorCertificationValidationService().defaultNumberOfDaysCheck(gecDocument.getTargetAccountingLines(), initialPeriodsFromParameter, true));       
++        return !(getGecErrorCertificationValidationService().defaultNumberOfDaysCheck(gecDocument, gecDocument.getTargetAccountingLines(), initialPeriodsFromParameter, true));       
+     }
+   
+     /**
+Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+===================================================================
+--- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 7239)
++++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 7240)
+@@ -52,13 +52,13 @@
+      */
+     public boolean validate(AttributedDocumentEvent event) {
+         boolean refNumValid;
++        GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
+         
+-        LOG.debug("validate ref number called");
++        LOG.debug("validate ref number called");     
++        LOG.debug("parm: " + parameterService.getIndicatorParameter(currDocument.getClass(), AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM));
+         
+-        LOG.debug("parm: " + parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM));
+-        
+         // if REFERENCE_NUMBER_VALIDATION_IND parameter is false, don't do validation
+-        if (parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM) == false) {
++        if (parameterService.getIndicatorParameter(currDocument.getClass(), AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM) == false) {
+             refNumValid = true;
+         }
+         else {
+Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+===================================================================
+--- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 7239)
++++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 7240)
+@@ -62,7 +62,7 @@
+     public boolean validate(AttributedDocumentEvent event) {
+         LOG.debug("validate error certification tab called");
+         GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
+-        String defaultDaysFromParam = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED);
++        String defaultDaysFromParam = parameterService.getParameterValue(currDocument.getClass(), AZKFSConstants.DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED);
+         Integer daysFromParameter = new Integer(defaultDaysFromParam);
+         
+         boolean success = true;
+@@ -74,14 +74,14 @@
+         // check original transaction dates and the system parameters involving age of transaction
+         try {
+             acctLines = currDocument.getSourceAccountingLines();
+-            olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, daysFromParameter, checkSubFund);
++            olderThanOriginal = !defaultNumberOfDaysCheck(currDocument, acctLines, daysFromParameter, checkSubFund);
+             LOG.debug("olderThanOriginal for source accounting lines: " + olderThanOriginal);
+             
+             // if all source accounting lines are younger than the days specified in the parameter, check target accounting lines
+             if (!olderThanOriginal) {
+                 acctLines = currDocument.getTargetAccountingLines();
+                 checkSubFund = true;
+-                olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, daysFromParameter, checkSubFund);
++                olderThanOriginal = !defaultNumberOfDaysCheck(currDocument, acctLines, daysFromParameter, checkSubFund);
+                 LOG.debug("olderThanOriginal for target accounting lines: " + olderThanOriginal);
+             }
+         }
+@@ -122,7 +122,7 @@
+      *  parameter; false otherwise
+      * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
+      */
+-    public boolean defaultNumberOfDaysCheck(List<AccountingLineBase> accountingLines, Integer daysFromParameter, boolean checkSubFund) throws EntryNotFoundException {
++    public boolean defaultNumberOfDaysCheck(GeneralErrorCorrectionDocument currDocument, List<AccountingLineBase> accountingLines, Integer daysFromParameter, boolean checkSubFund) throws EntryNotFoundException {
+         Date originalDate;
+ 
+         for (AccountingLineBase currentLine : (List<AccountingLineBase>) accountingLines) {
+@@ -131,7 +131,7 @@
+             
+             // if target line, check sub fund associated with the account on the original doc
+             if (currentLine instanceof TargetAccountingLine) {
+-                daysFromParameter = checkCurrentSubFund(daysFromParameter, currentLine);
++                daysFromParameter = checkCurrentSubFund(currDocument, daysFromParameter, currentLine);
+             }
+             LOG.debug("daysFromParameter: " + daysFromParameter);
+        
+@@ -179,10 +179,10 @@
+      * @return the daysFromParameter, which may have value in ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND
+      * @throws EntryNotFoundException
+      */
+-    protected Integer checkCurrentSubFund(Integer daysFromParameter, AccountingLineBase currLine) throws EntryNotFoundException {
++    protected Integer checkCurrentSubFund(GeneralErrorCorrectionDocument currDocument, Integer daysFromParameter, AccountingLineBase currLine) throws EntryNotFoundException {
+         LOG.debug("in checkCurrentSubFund");
+         SubFundGroup subFundGroup = currLine.getAccount().getSubFundGroup();        
+-        String newCompareDate = parameterService.getParameterValue(edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, subFundGroup.getSubFundGroupCode());
++        String newCompareDate = parameterService.getParameterValue(currDocument.getClass(), AZKFSConstants.ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, subFundGroup.getSubFundGroupCode());
+                         
+         if (newCompareDate != null) {
+             daysFromParameter = new Integer(newCompareDate);
+Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java
+===================================================================
+--- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java	(revision 7239)
++++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java	(revision 7240)
+@@ -1,29 +0,0 @@
+-/*
+- * Copyright 2009 The Kuali Foundation.
+- * 
+- * Licensed under the Educational Community License, Version 1.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- * 
+- * http://www.opensource.org/licenses/ecl1.php
+- * 
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- */
+-package edu.arizona.kfs.fp.document.web.struts;
+-
+-import edu.arizona.kfs.fp.businessobject.ErrorCertification;
+-import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
+-
+-public class GeneralErrorCorrectionForm extends org.kuali.kfs.fp.document.web.struts.GeneralErrorCorrectionForm {       
+-    
+-    public GeneralErrorCorrectionForm() {
+-        super();
+-        GeneralErrorCorrectionDocument document = new GeneralErrorCorrectionDocument();
+-        document.setErrorCertification(new ErrorCertification());
+-        setDocument(document); 
+-    }    
+-}
+Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java
+===================================================================
+--- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java	(revision 7239)
++++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java	(revision 7240)
+@@ -15,8 +15,15 @@
+  */
+ package edu.arizona.kfs.fp.document.web.struts;
+ 
++import org.kuali.kfs.fp.document.web.struts.GeneralErrorCorrectionForm;
++
+ public class YearEndGeneralErrorCorrectionForm extends GeneralErrorCorrectionForm {
+     public YearEndGeneralErrorCorrectionForm() {
+         super();
+     }
++    
++    @Override
++    protected String getDefaultDocumentTypeName() {
++        return "YEGE";
++    }
+ }

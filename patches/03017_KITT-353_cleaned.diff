@@ -1,0 +1,11 @@
+Index: work/src/edu/arizona/kfs/sys/AZKFSConstants.java
+===================================================================
+--- work/src/edu/arizona/kfs/sys/AZKFSConstants.java	(revision 3016)
++++ work/src/edu/arizona/kfs/sys/AZKFSConstants.java	(revision 3017)
+@@ -28,4 +28,6 @@
+     public static final String VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";  // for KITT-296
+     public static final String INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";  // for KITT-296
+     public static final String REFERENCE_NUMBER_VALIDATION_IND_PARM = "REFERENCE_NUMBER_VALIDATION_IND";
++    public static final String DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED = "DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED";
++    public static final String EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND = "EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND";
+ }

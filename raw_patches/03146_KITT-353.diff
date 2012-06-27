@@ -1,0 +1,16 @@
+Index: financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties
+===================================================================
+--- financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties	(revision 3145)
++++ financial-system/kfs/trunk/work/src/arizona-ApplicationResources.properties	(revision 3146)
+@@ -1,4 +1,8 @@
+ error.common.validation.alphanumeric = {0} is not a valid alphanumeric value.
+ error.document.pch.invalidGroupName = {0} is an invalid group name.
++
++# GEC Messages
+ error.gec.ref.number = Reference number entered does not correspond to an existing GL transaction.
+-error.errorcert.fieldsreq = All fields required in Error Certification tab.
+\ No newline at end of file
++error.errorCert.dateParamTriggered = The Error Certification tab must be completed because a transaction being moved is greater than the number of days authorized. (Troubleshooting information: parameters: DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED or EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, module: KFS-FP, component: GeneralErrorCorrection)
++error.errorCert.fieldsReq = If any fields in this tab are completed, all fields must be completed.
++question.gec.errorCertStmt = I hereby certify that these expenses were incurred for the goals, objectives, and benefit of grant/contract, and that the expenditure transfer is correct and proper.  In the event of a subsequent audit disallowance of this expense transfer for any reason, the Principal Investigator/Fiscal Officer and Department Head agree to be jointly responsible for handling this expense in a manner which is consistent with UA policy.
+\ No newline at end of file

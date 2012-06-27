@@ -1,0 +1,12 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml	(revision 2143)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/spring-fp.xml	(revision 2144)
+@@ -45,5 +45,7 @@
+ 		</property>
+ 	</bean>  
+ 	
++	<!-- validations -->
++	<import resource="document/validation/configuration/GeneralErrorCorrectionValidation.xml" />
+ </beans>
+ 

@@ -1,0 +1,71 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml	(revision 0)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml	(revision 2142)
+@@ -0,0 +1,66 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ Copyright 2005-2007 The Kuali Foundation.
++ 
++ Licensed under the Educational Community License, Version 1.0 (the "License");
++ you may not use this file except in compliance with the License.
++ You may obtain a copy of the License at
++ 
++ http://www.opensource.org/licenses/ecl1.php
++ 
++ Unless required by applicable law or agreed to in writing, software
++ distributed under the License is distributed on an "AS IS" BASIS,
++ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ See the License for the specific language governing permissions and
++ limitations under the License.
++-->
++<beans xmlns="http://www.springframework.org/schema/beans"
++    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++    xmlns:p="http://www.springframework.org/schema/p"
++    xsi:schemaLocation="http://www.springframework.org/schema/beans
++        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
++    
++	<bean id="GeneralErrorCorrection-addAccountingLineValidation" parent="GeneralErrorCorrection-addAccountingLineValidation-parentBean" scope="prototype">
++   	  	<property name="validations">
++  			<list merge="true">
++  				<bean parent="GeneralErrorCorrection-referenceNumberValidation" scope="prototype">
++  				  	<property name="parameterProperties">
++  						<list>
++  							<bean parent="validationFieldConversion">
++  								<property name="sourceEventProperty" value="accountingLine" />
++  								<property name="targetValidationProperty" value="accountingLineForValidation" />
++  							</bean>
++  						</list>
++  					</property>
++  				</bean>
++  			</list>
++  		</property>
++	</bean>  
++  
++    <!-- Had to include a bean in orig. parent bean because it had no list to merge with -->
++	<bean id="GeneralErrorCorrection-updateAccountingLineValidation" parent="GeneralErrorCorrection-updateAccountingLineValidation-parentBean" scope="prototype">
++	  	<property name="validations">
++  			<list>
++  				<bean parent="AccountingDocument-UpdateAccountingLine-DefaultValidation" scope="prototype" />
++  				<bean parent="GeneralErrorCorrection-referenceNumberValidation" scope="prototype">
++  				  	<property name="parameterProperties">
++  						<list>
++  							<bean parent="validationFieldConversion">
++  								<property name="sourceEventProperty" value="updatedAccountingLine" />
++  								<property name="targetValidationProperty" value="accountingLineForValidation" />
++  							</bean>
++  						</list>
++  					</property>
++  				</bean>
++  			</list>
++  		</property>
++  	</bean>
++  	
++	<!-- KITT-353 -->
++	<bean id="GeneralErrorCorrection-referenceNumberValidation" scope="prototype" parent="GeneralErrorCorrection-referenceNumberValidation-parentBean" />
++
++	<bean id="GeneralErrorCorrection-referenceNumberValidation-parentBean" class="edu.arizona.kfs.fp.document.validation.impl.GeneralErrorCorrectionRefNumberValidation" abstract="true">
++		<property name="parameterService" ref="parameterService" />
++	</bean>
++
++</beans>

@@ -1,0 +1,139 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 0)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java	(revision 2143)
+@@ -0,0 +1,134 @@
++/*
++ * Copyright 2009 The Kuali Foundation.
++ * 
++ * Licensed under the Educational Community License, Version 1.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl1.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.fp.document.validation.impl;
++
++import java.util.Collection;
++import java.util.HashMap;
++import java.util.Map;
++
++import org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument;
++import org.kuali.kfs.gl.businessobject.Entry;
++import edu.arizona.kfs.sys.KFSKeyConstants;
++import org.kuali.kfs.sys.businessobject.AccountingLine;
++import org.kuali.kfs.sys.businessobject.AccountingLineBase;
++import org.kuali.kfs.sys.context.SpringContext;
++import org.kuali.kfs.sys.document.validation.GenericValidation;
++import org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent;
++import org.kuali.rice.kns.service.BusinessObjectService;
++import org.kuali.rice.kns.service.ParameterService;
++import org.kuali.rice.kns.util.GlobalVariables;
++
++import static org.kuali.kfs.sys.KFSPropertyConstants.REFERENCE_NUMBER;
++
++import edu.arizona.kfs.sys.AZKFSConstants;
++
++public class GeneralErrorCorrectionRefNumberValidation extends GenericValidation {
++    private ParameterService parameterService;
++    private AccountingLineBase accountingLineForValidation;
++    
++    protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralErrorCorrectionRefNumberValidation.class);
++       
++    /** 
++     * @see org.kuali.kfs.sys.document.validation.Validation#validate(org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent)
++     */
++    public boolean validate(AttributedDocumentEvent event) {
++        boolean refNumValid;
++        
++        LOG.info("validate ref number called");
++        
++        LOG.info("parm: " + parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM));
++        
++        // if REFERENCE_NUMBER_VALIDATION_IND parameter is false, don't do validation
++        if (parameterService.getIndicatorParameter(GeneralErrorCorrectionDocument.class, AZKFSConstants.REFERENCE_NUMBER_VALIDATION_IND_PARM) == false) {
++            refNumValid = true;
++        }
++        else {
++            refNumValid = isRefNumValid();
++        }
++        
++        return refNumValid;
++    }
++    
++    /** 
++     * Checks to see if the reference number on an accounting line matches a record in GL_ENTRY_T.
++     * @return boolean
++     */
++    protected boolean isRefNumValid() {
++        Collection matchingEntry = getRefNumberMatch();
++
++        if (matchingEntry != null && matchingEntry.size() > 0) {
++            return true;
++        }
++        else {
++            GlobalVariables.getErrorMap().putError(REFERENCE_NUMBER, KFSKeyConstants.ERROR_GEC_REF_NUMBER_INVALID, accountingLineForValidation.getReferenceNumber());
++            return false;
++        }        
++    }
++    
++    /**
++     * 
++     * This method tries to fetch a record in GL_ENTRY_T that has a FDOC_NBR = reference number entered.
++     * @return Collection representing the matching GL entry
++     */
++    protected Collection getRefNumberMatch() {
++        LOG.info("ref num: " + accountingLineForValidation.getReferenceNumber());
++        
++        Map criteria = new HashMap();
++        criteria.put("documentNumber", accountingLineForValidation.getReferenceNumber());
++        
++        Collection results = getBusinessObjectService().findMatching(Entry.class, criteria);
++        LOG.info("results: " + results);
++        
++        return results;        
++    }
++
++    /**
++     * Gets the parameterService attribute. 
++     * @return Returns the parameterService.
++     */
++    public ParameterService getParameterService() {
++        return parameterService;
++    }
++    /**
++     * Sets the parameterService attribute value.
++     * @param parameterService The parameterService to set.
++     */
++    public void setParameterService(ParameterService parameterService) {
++        this.parameterService = parameterService;
++    }
++    /**
++     * Gets the accountingLineForValidation attribute. 
++     * @return Returns the accountingLineForValidation.
++     */
++    public AccountingLineBase getAccountingLineForValidation() {
++        return accountingLineForValidation;
++    }
++    /**
++     * Sets the accountingLineForValidation attribute value.
++     * @param accountingLineForValidation The accountingLineForValidation to set.
++     */
++    public void setAccountingLineForValidation(AccountingLineBase accountingLineForValidation) {
++        this.accountingLineForValidation = accountingLineForValidation;
++    }
++    
++    /**
++     * Gets the BO service from Spring.
++     * @return BusinessObjectService
++     */
++    private BusinessObjectService getBusinessObjectService() {
++        return SpringContext.getBean(BusinessObjectService.class);
++    }  
++}

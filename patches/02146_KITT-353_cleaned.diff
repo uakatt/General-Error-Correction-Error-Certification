@@ -1,0 +1,12 @@
+Index: work/src/edu/arizona/kfs/sys/KFSKeyConstants.java
+===================================================================
+--- work/src/edu/arizona/kfs/sys/KFSKeyConstants.java	(revision 2145)
++++ work/src/edu/arizona/kfs/sys/KFSKeyConstants.java	(revision 2146)
+@@ -32,5 +32,6 @@
+     public static final String ERROR_PCH_INVALID_GROUPNAME = "error.document.pch.invalidGroupName";
+     //Account Assession Code Errors
+     public static final String ERROR_ACCOUNT_EXTENDED_ATTR_INVALID_DATA = "error.common.validation.alphanumeric";//KITT-200
+-    
++
++    public static final String ERROR_GEC_REF_NUMBER_INVALID = "error.gec.ref.number";
+ }

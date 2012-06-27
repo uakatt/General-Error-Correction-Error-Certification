@@ -1,0 +1,10 @@
+Index: work/src/edu/arizona/kfs/sys/AZKFSConstants.java
+===================================================================
+--- work/src/edu/arizona/kfs/sys/AZKFSConstants.java	(revision 2144)
++++ work/src/edu/arizona/kfs/sys/AZKFSConstants.java	(revision 2145)
+@@ -27,4 +27,5 @@
+     public static final String GL_USETAX_TAX_REGION = "USE_TAX_TAX_REGION_CODE";
+     public static final String VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "VALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";  // for KITT-296
+     public static final String INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP_PARM = "INVALID_OBJECT_SUB_TYPES_BY_SUB_FUND_GROUP";  // for KITT-296
++    public static final String REFERENCE_NUMBER_VALIDATION_IND_PARM = "REFERENCE_NUMBER_VALIDATION_IND";
+ }

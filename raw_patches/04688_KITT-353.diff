@@ -1,0 +1,92 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 4687)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 4688)
+@@ -31,8 +31,10 @@
+ import org.kuali.kfs.coa.businessobject.Account;
+ import org.kuali.kfs.coa.businessobject.SubFundGroup;
+ import org.kuali.kfs.gl.businessobject.Entry;
++import org.kuali.kfs.module.ld.businessobject.ExpenseTransferTargetAccountingLine;
+ import org.kuali.kfs.sys.KFSPropertyConstants;
+ import org.kuali.kfs.sys.businessobject.AccountingLineBase;
++import org.kuali.kfs.sys.businessobject.TargetAccountingLine;
+ import org.kuali.kfs.sys.context.SpringContext;
+ import org.kuali.kfs.sys.document.AccountingDocument;
+ import org.kuali.kfs.sys.document.validation.GenericValidation;
+@@ -60,6 +62,7 @@
+     public boolean validate(AttributedDocumentEvent event) {
+         LOG.debug("validate error certification tab called");
+         GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
++        String defaultDaysFromParam = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED);
+         
+         boolean success = true;
+         boolean olderThanOriginal = false;
+@@ -70,15 +73,15 @@
+         // check original transaction dates and the system parameters involving age of transaction
+         try {
+             acctLines = currDocument.getSourceAccountingLines();
+-            olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, checkSubFund);
+-            LOG.debug("daysCheck for source accounting lines: " + olderThanOriginal);
++            olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, defaultDaysFromParam, checkSubFund);
++            LOG.debug("olderThanOriginal for source accounting lines: " + olderThanOriginal);
+             
+             // if all source accounting lines are younger than the days specified in the parameter, check target accounting lines
+             if (!olderThanOriginal) {
+                 acctLines = currDocument.getTargetAccountingLines();
+                 checkSubFund = true;
+-                olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, checkSubFund);
+-                LOG.debug("daysCheck for target accounting lines: " + olderThanOriginal);
++                olderThanOriginal = !defaultNumberOfDaysCheck(acctLines, defaultDaysFromParam, checkSubFund);
++                LOG.debug("olderThanOriginal for target accounting lines: " + olderThanOriginal);
+             }
+         }
+         catch (EntryNotFoundException e) {
+@@ -87,8 +90,8 @@
+         }
+         
+         // check for blank fields in the Error Certification Tab
+-        ErrorCertificationValidation ecValidation = new ErrorCertificationValidation();
+-        numBlankFields = ecValidation.errorCertificationBlankFieldsCheck(currDocument);
++        ErrorCertificationValidation errorCertificationTabValidation = new ErrorCertificationValidation();
++        numBlankFields = errorCertificationTabValidation.errorCertificationBlankFieldsCheck(currDocument);
+         LOG.debug("numBlankFields: " + numBlankFields);
+ 
+         
+@@ -112,29 +115,30 @@
+      *   <li>Get Original Transaction Date from {@link Entry} associated by ...</li>
+      * </ol> 
+      * @param accountingLines
++     * @param defaultDays
+      * @param checkSubFund indicates whether account's sub fund needs to be checked
+      * @return true if all of the original transaction dates are younger by days than specified in the appropriate
+      *  parameter; false otherwise
+      * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
+      */
+-    protected boolean defaultNumberOfDaysCheck(List<AccountingLineBase> accountingLines, boolean checkSubFund) throws EntryNotFoundException {
+-        String days = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED);
+-        Integer daysFromParameter = new Integer(days);
++    public boolean defaultNumberOfDaysCheck(List<AccountingLineBase> accountingLines, String defaultDays, boolean checkSubFund) throws EntryNotFoundException {
++        Integer daysFromParameter = new Integer(defaultDays);
+         Date originalDate;
+ 
+-        for (AccountingLineBase currLine : (List<AccountingLineBase>) accountingLines) {
+-            originalDate = getOriginalTransactionDate(currLine);            
++        for (AccountingLineBase currentLine : (List<AccountingLineBase>) accountingLines) {
++            originalDate = getOriginalTransactionDate(currentLine);            
+             LOG.debug("transaction date: " + originalDate);
+             
+             // if target line, check sub fund associated with the account on the original doc
+-            if (checkSubFund) {
+-                daysFromParameter = checkCurrentSubFund(daysFromParameter, currLine);
++            if (currentLine instanceof TargetAccountingLine) {
++                daysFromParameter = checkCurrentSubFund(daysFromParameter, currentLine);
+             }
+             LOG.debug("daysFromParameter: " + daysFromParameter);
+        
+             Calendar cal = Calendar.getInstance();
+             cal.add(cal.DATE, -daysFromParameter);
+             Date dateForComparison = cal.getTime();
++            LOG.debug("dateForComparison: " + dateForComparison);
+             
+             if (dateForComparison.after(originalDate)) {
+                 return false;

@@ -1,0 +1,22 @@
+Index: work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
+===================================================================
+--- work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 4606)
++++ work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 4607)
+@@ -97,7 +97,7 @@
+     
+     /**
+      * This method iterates through the target accounting lines to examine the original transaction date,
+-     * the sub funds, and the EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter. 
++     * the sub funds, and the ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter. 
+      * @param gecDocument
+      * @return true if there is a transaction that contains the sub fund in the parameter and the original 
+      * transaction is older than the number of days in the parameter; false otherwise 
+@@ -164,7 +164,7 @@
+     /**
+      * This method checks the sub fund associated with the account in an accounting line.
+      * @param currLine
+-     * @return number of days from EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter if it contains
++     * @return number of days from ERROR_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter if it contains
+      * the sub fund in the currLine; null of no match
+      * 
+      * @throws EntryNotFoundException

@@ -1,0 +1,11 @@
+Index: work/src/arizona-ApplicationResources.properties
+===================================================================
+--- work/src/arizona-ApplicationResources.properties	(revision 2146)
++++ work/src/arizona-ApplicationResources.properties	(revision 2147)
+@@ -1,2 +1,3 @@
+ error.common.validation.alphanumeric = {0} is not a valid alphanumeric value.
+-error.document.pch.invalidGroupName = {0} is an invalid group name.
+\ No newline at end of file
++error.document.pch.invalidGroupName = {0} is an invalid group name.
++error.gec.ref.number = Reference number entered does not correspond to an existing GL transaction.
+\ No newline at end of file

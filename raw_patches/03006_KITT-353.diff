@@ -1,0 +1,246 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 0)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionErrorCertificationValidation.java	(revision 3006)
+@@ -0,0 +1,241 @@
++/*
++ * Copyright 2009 The Kuali Foundation.
++ * 
++ * Licensed under the Educational Community License, Version 1.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl1.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.fp.document.validation.impl;
++
++import static org.kuali.kfs.sys.KFSPropertyConstants.REFERENCE_NUMBER;
++
++import java.util.Calendar;
++import java.util.Collection;
++import java.util.Date;
++import java.util.HashMap;
++import java.util.List;
++import java.util.ListIterator;
++import java.util.Map;
++
++import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
++
++import org.apache.commons.lang.StringUtils;
++import org.kuali.kfs.coa.businessobject.Account;
++import org.kuali.kfs.coa.businessobject.SubFundGroup;
++import org.kuali.kfs.gl.businessobject.Entry;
++import org.kuali.kfs.sys.KFSPropertyConstants;
++import org.kuali.kfs.sys.businessobject.AccountingLineBase;
++import org.kuali.kfs.sys.context.SpringContext;
++import org.kuali.kfs.sys.document.AccountingDocument;
++import org.kuali.kfs.sys.document.validation.GenericValidation;
++import org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent;
++import org.kuali.rice.kns.service.BusinessObjectService;
++import org.kuali.rice.kns.service.ParameterService;
++import org.kuali.rice.kns.util.GlobalVariables;
++import org.kuali.rice.kns.util.KNSPropertyConstants;
++
++import edu.arizona.kfs.fp.businessobject.ErrorCertification;
++import edu.arizona.kfs.sys.AZKFSConstants;
++import edu.arizona.kfs.sys.KFSKeyConstants;
++
++public class GeneralErrorCorrectionErrorCertificationValidation extends GenericValidation {
++    private ParameterService parameterService;
++    private BusinessObjectService businessObjectService;
++    private AccountingLineBase accountingLineForValidation;
++    private static int NUM_ERROR_CERT_FIELDS = 4;
++    
++    protected static org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GeneralErrorCorrectionErrorCertificationValidation.class);
++    
++    /** 
++     * @see org.kuali.kfs.sys.document.validation.Validation#validate(org.kuali.kfs.sys.document.validation.event.AttributedDocumentEvent)
++     */
++    public boolean validate(AttributedDocumentEvent event) {
++        LOG.info("validate error certification tab called");
++        GeneralErrorCorrectionDocument currDocument = (GeneralErrorCorrectionDocument)event.getDocument();
++        
++        boolean success = true;
++        boolean daysCheck = true;
++        boolean checkSubFund = false;  // indicates whether sub fund should be checked for EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND rule
++        int numBlankFields = 0;
++        List<AccountingLineBase> acctLines;
++        
++        // check original transaction dates and the system parameters involving age of transaction
++        try {
++            acctLines = currDocument.getSourceAccountingLines();
++            daysCheck = defaultNumberOfDaysCheck(acctLines, checkSubFund);
++            LOG.info("daysCheck for source accounting lines: " + daysCheck);
++            
++            // if all source accounting lines are younger than the days specified in the parameter, check target accounting lines
++            if (daysCheck) {
++                acctLines = currDocument.getTargetAccountingLines();
++                checkSubFund = true;
++                daysCheck = defaultNumberOfDaysCheck(acctLines, checkSubFund);
++                LOG.info("daysCheck for target accounting lines: " + daysCheck);
++            }
++        }
++        catch (EntryNotFoundException e) {
++            GlobalVariables.getErrorMap().putError(REFERENCE_NUMBER, KFSKeyConstants.ERROR_GEC_REF_NUMBER_INVALID, e.getCriteria().get(KNSPropertyConstants.DOCUMENT_NUMBER));
++            LOG.info("defaultNumberOfDaysCheck failed", e);
++            success = false;
++        }
++        
++        // check for blank fields in the Error Certification Tab
++        ErrorCertificationValidation ecValidation = new ErrorCertificationValidation();
++        numBlankFields = ecValidation.errorCertificationBlankFieldsCheck(currDocument);
++        LOG.info("numBlankFields: " + numBlankFields);
++        
++        // if there is a transaction older than DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED and at least one blank field
++        if ((daysCheck == false) && (numBlankFields > 1)) {
++            GlobalVariables.getErrorMap().putErrorForSectionId("error.errorcert.*", KFSKeyConstants.ERROR_ERROR_CERT_FIELDS_REQ, "error.errorcert.fieldsreq");
++        }
++      
++        // make else if?
++        // if at least one but not all Error Cert fields are filled out
++        if ((numBlankFields > 1) && (numBlankFields < NUM_ERROR_CERT_FIELDS)) {
++            GlobalVariables.getErrorMap().putErrorForSectionId("error.errorcert.*", KFSKeyConstants.ERROR_ERROR_CERT_FIELDS_REQ, "error.errorcert.fieldsreq");
++        }
++
++        return success;
++    }
++
++    /**
++     * Determines if the error certification tab is filled out properly based on the age of the transactions.
++     * If checking source accounting lines, use the days in the
++     *  DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED parameter.
++     * If checking target accounting lines, check account's sub fund and maybe use
++     *  EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter.
++     * 
++     * <ol>
++     *   <li>Loop through {@link AccountingLineBase} instances in the {@link AccountingDocument}.</li>
++     *   <li>Get Original Transaction Date from {@link Entry} associated by ...</li>
++     * </ol> 
++     * @param accountingLines
++     * @param checkSubFund indicates whether account's sub fund needs to be checked
++     * @return true if all of the original transaction dates are younger by days than specified in the appropriate
++     *  parameter; false otherwise
++     * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
++     */
++    protected boolean defaultNumberOfDaysCheck(List<AccountingLineBase> accountingLines, boolean checkSubFund) throws EntryNotFoundException {
++        String days = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED);
++        Integer daysFromParameter = new Integer(days);
++        Date originalDate;
++
++        for (AccountingLineBase currLine : (List<AccountingLineBase>) accountingLines) {
++            originalDate = getOriginalTransactionDate(currLine);            
++            LOG.info("transaction date: " + originalDate);
++            
++            // if target line, check sub fund associated with the account on the original doc
++            if (checkSubFund) {
++                daysFromParameter = checkCurrentSubFund(daysFromParameter, currLine);
++            }
++            LOG.info("daysFromParameter: " + daysFromParameter);
++       
++            Calendar cal = Calendar.getInstance();
++            cal.add(cal.DATE, -daysFromParameter);
++            Date dateForComparison = cal.getTime();
++            
++            if (dateForComparison.after(originalDate)) {
++                return false;
++            }
++        }
++        return true;
++    }
++    
++    /**
++     * Gets original transaction date of given accounting line. Uses reference number. 
++     * The original transaction's FDOC_NBR = accounting line's reference number.
++     * @return original transaction's date
++     * @throws EntryNotFoundException if an Entry with the reference number cannot be found.
++     */
++    protected Date getOriginalTransactionDate(AccountingLineBase currentLine) throws EntryNotFoundException {
++        Map criteria = new HashMap();
++        criteria.put(KNSPropertyConstants.DOCUMENT_NUMBER, currentLine.getReferenceNumber());
++        
++        Collection<Entry> results = getBusinessObjectService().findMatching(Entry.class, criteria);
++        if (results.size() == 0) {
++            throw new EntryNotFoundException(criteria);   
++        }
++                
++        for (Entry entry : results) {            
++            return entry.getTransactionDate();
++        }
++        
++        return new Date();  // dummy return to pass compiler
++    }
++    
++    /**
++     * This method checks the sub fund associated with the account in an accounting line.
++     * If sub fund is in EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND parameter, use different # of days
++     * @param daysFromParameter The days in DEFAULT_NUMBER_OF_DAYS_ERROR_CERTIFICATION_TAB_REQUIRED
++     * @param currLine
++     * @return the daysFromParameter, which may have value in EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND
++     * @throws EntryNotFoundException
++     */
++    protected Integer checkCurrentSubFund(Integer daysFromParameter, AccountingLineBase currLine) throws EntryNotFoundException {
++        LOG.info("in checkCurrentSubFund");
++        SubFundGroup subFundGroup = currLine.getAccount().getSubFundGroup();        
++        String newCompareDate = parameterService.getParameterValue(org.kuali.kfs.fp.document.GeneralErrorCorrectionDocument.class, AZKFSConstants.EFFORT_CERTIFICATION_DEFAULT_OVERRIDE_BY_SUB_FUND, subFundGroup.getSubFundGroupCode());
++                        
++        if (newCompareDate != null) {
++            daysFromParameter = new Integer(newCompareDate);
++        }
++              
++        return daysFromParameter;
++    }
++        
++    /**
++     * Gets the parameterService attribute. 
++     * @return Returns the parameterService.
++     */
++    public ParameterService getParameterService() {
++        return parameterService;
++    }
++    
++    /**
++     * Sets the parameterService attribute value.
++     * @param parameterService The parameterService to set.
++     */
++    public void setParameterService(ParameterService parameterService) {
++        this.parameterService = parameterService;
++    }
++    
++    /**
++     * Gets the accountingLineForValidation attribute. 
++     * @return Returns the accountingLineForValidation.
++     */
++    public AccountingLineBase getAccountingLineForValidation() {
++        return accountingLineForValidation;
++    }
++    
++    /**
++     * Sets the accountingLineForValidation attribute value.
++     * @param accountingLineForValidation The accountingLineForValidation to set.
++     */
++    public void setAccountingLineForValidation(AccountingLineBase accountingLineForValidation) {
++        this.accountingLineForValidation = accountingLineForValidation;
++    }
++    
++    /**
++     * Gets the BO service.
++     * @return BusinessObjectService
++     */
++    public BusinessObjectService getBusinessObjectService() {
++        return this.businessObjectService;
++    }
++    
++    /**
++     * Sets the BO service.
++     * @param businessObjectService to set.
++     */
++    public void setBusinessObjectService(BusinessObjectService businessObjectService) {
++        this.businessObjectService = businessObjectService;
++    }    
++}
