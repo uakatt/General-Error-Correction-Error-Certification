@@ -40,9 +40,9 @@ This is a list of Jira tickets at the University of Arizona that relate to this 
 <h2>Liquibase Changesets</h2>
 
 * `latest/dat/KRNS_PARM_T.xml` saw the following activity:
-  * changed in [#7270](https://subversion.uits.arizona.edu/kitt-anon/kitt/!svn/bc/7270//financial-system/kfs-cfg-dbs/trunk/latest/dat/KRNS_PARM_T.xml).
+  * changed in #7270 (resultant file: [`whole_files/r7270/KRNS_PARM_T.xml`](General-Error-Correction-Error-Certification/blob/master/whole_files/r7270/KRNS_PARM_T.xml)).
 * `update/KITT-744.xml` saw the following activity:
-  * created in [#7270](https://subversion.uits.arizona.edu/kitt-anon/kitt/!svn/bc/7270//financial-system/kfs-cfg-dbs/trunk/update/KITT-744.xml).
+  * created in #7270 (resultant file: [`whole_files/r7270/KITT-744.xml`](General-Error-Correction-Error-Certification/blob/master/whole_files/r7270/KITT-744.xml)).
 
 (2 changes among 2 files)
 
