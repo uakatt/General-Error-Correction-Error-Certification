@@ -1,0 +1,117 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/FPConstants.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/FPConstants.java	(revision 30810)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/FPConstants.java	(revision 30811)
+@@ -33,4 +33,8 @@
+     public static final int MAX_BANK_REF_NBR = 10;
+     
+     public static final String ACTIVE_EMPLOYEE_STATUS_CODES_PARAM_NAME = "ACTIVE_EMPLOYEE_STATUS_CODES"; 
++    
++    public static class GeneralErrorCorrectionEditMode {        
++        public static final String ERROR_CERTIFICATE_TAB_ENTRY = "errorCertTabEntry";        
++    }
+ }
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml	(revision 30810)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml	(revision 30811)
+@@ -18,6 +18,7 @@
+   <bean id="YearEndGeneralErrorCorrectionDocument" parent="YearEndGeneralErrorCorrectionDocument-parentBean">
+     <property name="documentClass" value="edu.arizona.kfs.fp.document.YearEndGeneralErrorCorrectionDocument"/>
+     <property name="promptBeforeValidationClass" value="edu.arizona.kfs.fp.document.validation.impl.GeneralErrorCorrectionDocumentPreRules"/>
++    <property name="documentPresentationControllerClass" value="edu.arizona.kfs.fp.document.authorization.YearEndGeneralErrorCorrectionDocumentPresentationController"/>
+   <!-- **START AZ** KATTS-706  KevinMcO -->
+   <property name="importedLineParserClass" value="org.kuali.kfs.fp.businessobject.GeneralErrorCorrectionDocumentAccountingLineParser"/>
+   <!-- **END AZ** KATTS-706 -->
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml	(revision 30810)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml	(revision 30811)
+@@ -8,6 +8,7 @@
+   <bean id="GeneralErrorCorrectionDocument" parent="GeneralErrorCorrectionDocument-parentBean">
+   	<property name="documentClass" value="edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument"/>
+   	<property name="promptBeforeValidationClass" value="edu.arizona.kfs.fp.document.validation.impl.GeneralErrorCorrectionDocumentPreRules"/>
++  	<property name="documentPresentationControllerClass" value="edu.arizona.kfs.fp.document.authorization.GeneralErrorCorrectionDocumentPresentationController"/>
+   </bean>
+   
+   <!-- workflow attributes for routing -->
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/YearEndGeneralErrorCorrectionDocumentPresentationController.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/YearEndGeneralErrorCorrectionDocumentPresentationController.java	(revision 0)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/YearEndGeneralErrorCorrectionDocumentPresentationController.java	(revision 30811)
+@@ -0,0 +1,20 @@
++/*
++ * Copyright 2009 The Kuali Foundation
++ * 
++ * Licensed under the Educational Community License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl2.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.fp.document.authorization;
++
++public class YearEndGeneralErrorCorrectionDocumentPresentationController extends GeneralErrorCorrectionDocumentPresentationController {
++    
++}
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/GeneralErrorCorrectionDocumentPresentationController.java
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/GeneralErrorCorrectionDocumentPresentationController.java	(revision 0)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/GeneralErrorCorrectionDocumentPresentationController.java	(revision 30811)
+@@ -0,0 +1,37 @@
++/*
++ * Copyright 2009 The Kuali Foundation
++ * 
++ * Licensed under the Educational Community License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ * 
++ * http://www.opensource.org/licenses/ecl2.php
++ * 
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package edu.arizona.kfs.fp.document.authorization;
++
++import java.util.List;
++import java.util.Set;
++
++import edu.arizona.kfs.fp.FPConstants.GeneralErrorCorrectionEditMode;
++import org.kuali.kfs.sys.document.authorization.AccountingDocumentPresentationControllerBase;
++import org.kuali.rice.kns.document.Document;
++
++public class GeneralErrorCorrectionDocumentPresentationController extends AccountingDocumentPresentationControllerBase {
++
++    /**
++     * @see org.kuali.kfs.sys.document.authorization.FinancialSystemTransactionalDocumentPresentationControllerBase#getEditModes(org.kuali.rice.kns.document.Document)
++     */
++    @Override
++    public Set<String> getEditModes(Document document) {
++        Set<String> editModes = super.getEditModes(document);
++        editModes.add(GeneralErrorCorrectionEditMode.ERROR_CERTIFICATE_TAB_ENTRY);
++        
++        return editModes;
++    }
++}
+Index: financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag
+===================================================================
+--- financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag	(revision 30810)
++++ financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag	(revision 30811)
+@@ -21,7 +21,7 @@
+ <%@ attribute name="documentAttributes" required="true" type="java.util.Map"
+     description="The DataDictionary entry containing attributes for this row's fields." %>
+ 
+-<c:set var="fullEntryMode" value="${KualiForm.documentActions[Constants.KUALI_ACTION_CAN_EDIT]}" />
++<c:set var="fullEntryMode" value="${KualiForm.editingMode['errorCertTabEntry']}" />
+     	
+ <kul:tab tabTitle="Error Certification" defaultOpen="true" tabErrorKey="document.errorCertification">
+      <div class="tab-container" align="center">

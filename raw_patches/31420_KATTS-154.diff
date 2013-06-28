@@ -1,0 +1,13 @@
+Index: financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag
+===================================================================
+--- financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag	(revision 31419)
++++ financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag	(revision 31420)
+@@ -21,7 +21,7 @@
+ <%@ attribute name="documentAttributes" required="true" type="java.util.Map"
+     description="The DataDictionary entry containing attributes for this row's fields." %>
+ 
+-<c:set var="fullEntryMode" value="${KualiForm.editingMode['errorCertTabEntry']}" />
++<c:set var="fullEntryMode" value="${KualiForm.editingMode['errorCertTabEntry'] || KualiForm.documentActions[Constants.KUALI_ACTION_CAN_EDIT]}" />
+     	
+ <kul:tab tabTitle="Error Certification" defaultOpen="true" tabErrorKey="document.errorCertification">
+      <div class="tab-container" align="center">

@@ -421,3 +421,22 @@ Changed paths:
 
 KATTS-697 GEC/YECEC documents error certification being validated on save
 ------------------------------------------------------------------------
+------------------------------------------------------------------------
+r30811 | jwingate@CATNET.ARIZONA.EDU | 2013-03-20 12:07:35 -0700 (Wed, 20 Mar 2013) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/FPConstants.java
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/GeneralErrorCorrectionDocumentPresentationController.java
+   A /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/authorization/YearEndGeneralErrorCorrectionDocumentPresentationController.java
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag
+
+KATTS-154 GEC/YEGE: If the GEC/YEGE require the error cert be completed after the docs are Enroute the approver cannot edit these fields and has to disapprove.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r31420 | jwingate@CATNET.ARIZONA.EDU | 2013-05-03 15:49:02 -0700 (Fri, 03 May 2013) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/web-root/WEB-INF/tags/fp/errorCertification.tag
+
+KATTS-1603 KATTS-154 Regression bug caused by KATTS-154 found in KATTS-1603 testing.
+------------------------------------------------------------------------

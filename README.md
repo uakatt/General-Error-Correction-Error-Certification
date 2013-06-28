@@ -38,6 +38,8 @@ This is a list of Jira tickets at the University of Arizona that relate to this 
   revisions: #15345
 * **KATTS-697**: (A fix to the mod to not validate error cert tab on a save)<br />
   revisions: #30476
+* **KATTS-154**: (A fix to the mod to allow FO to edit error cert fields on enroute GEC/YEGEC)<br />
+  revisions: #30811, #31420
 
 <h2>Liquibase Changesets</h2>
 
@@ -114,6 +116,8 @@ src/org/kuali/kfs...
 * [`patches/07233_KITT-353_cleaned.diff`](patches/07233_KITT-353_cleaned.diff) is the patch file for #7233.
 * [`patches/15345_KITT-2004_cleaned.diff`](patches/15345_KITT-2004_cleaned.diff) is the patch file for #15345.
 * [`patches/30476_KATTS-697_cleaned.diff`](patches/30476_KATTS-697_cleaned.diff) is the patch file for #30476.
+* [`patches/30811_KATTS-154_cleaned.diff`](patches/30811_KATTS-154_cleaned.diff) is the patch file for #30811.
+* [`patches/31420_KATTS-154_cleaned.diff`](patches/31420_KATTS-154_cleaned.diff) is the patch file for #31420.
 
 <h2>Revisions</h2>
 
@@ -289,15 +293,23 @@ file for every revision listed below for the following reasons:
 *   \#30476 was committed against KATTS-697 on 2013-02-25 23:57:44 UTC by <strong>jwingate@CATNET.ARIZONA.EDU</strong>.
 
     > KATTS-697 GEC/YECEC documents error certification being validated on save
+*   \#30811 was committed against KATTS-154 on 2013-03-20 19:07:35 UTC by <strong>jwingate@CATNET.ARIZONA.EDU</strong>.
+
+    > KATTS-154 GEC/YEGE: If the GEC/YEGE require the error cert be completed after the docs are Enroute the approver cannot edit these fields and has to disapprove.
+*   \#31420 was committed against KATTS-154 on 2013-05-03 22:49:02 UTC by <strong>jwingate@CATNET.ARIZONA.EDU</strong>.
+
+    > KATTS-1603 KATTS-154 Regression bug caused by KATTS-154 found in KATTS-1603 testing.
 
 <h2>Files</h2>
 
-Files **created** for this modification (20 files)
+Files **created** for this modification (22 files)
 
     /work/src/edu/arizona/kfs/fp/businessobject/ErrorCertification.java
     /work/src/edu/arizona/kfs/fp/businessobject/datadictionary/ErrorCertification.xml
     /work/src/edu/arizona/kfs/fp/document/GeneralErrorCorrectionDocument.java
     /work/src/edu/arizona/kfs/fp/document/YearEndGeneralErrorCorrectionDocument.java
+    /work/src/edu/arizona/kfs/fp/document/authorization/GeneralErrorCorrectionDocumentPresentationController.java
+    /work/src/edu/arizona/kfs/fp/document/authorization/YearEndGeneralErrorCorrectionDocumentPresentationController.java
     /work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml
     /work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml
     /work/src/edu/arizona/kfs/fp/document/validation/configuration
@@ -315,12 +327,13 @@ Files **created** for this modification (20 files)
     /work/src/edu/arizona/kfs/sys/KFSConstants.java
     /work/web-root/WEB-INF/tags/fp/errorCertification.tag
 
-Files **modified** for this modification (11 files)
+Files **modified** for this modification (12 files)
 
     /test/unit/src/edu/arizona/kfs/fp/document/validation/GECErrorCertificationValidationTest.java
     /work/db/scripts/arizona/data.sql
     /work/db/scripts/arizona/schema-oracle.sql
     /work/src/arizona-ApplicationResources.properties
+    /work/src/edu/arizona/kfs/fp/FPConstants.java
     /work/src/edu/arizona/kfs/fp/ojb-fp.xml
     /work/src/edu/arizona/kfs/fp/spring-fp.xml
     /work/src/edu/arizona/kfs/sys/AZKFSConstants.java
@@ -396,20 +409,11 @@ For each file that was changed or added for this modification, I've looked at it
 *   **#30545** touches `/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml`.
 
     > KATTS-706 change line parser to GeneralErrorCorrectionDocumentAccountingLineParser
-*   **#30811** touches: 
-    * `/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml`
-    * `/work/web-root/WEB-INF/tags/fp/errorCertification.tag`
-    * `/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml`
-
-    > KATTS-154 GEC/YEGE: If the GEC/YEGE require the error cert be completed after the docs are Enroute the approver cannot edit these fields and has to disapprove.
 *   **#31381** touches `/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml`.
 
     > KATTS-1603 Modify YE document Routing To Include Fiscal Officer
-*   **#31420** touches `/work/web-root/WEB-INF/tags/fp/errorCertification.tag`.
 
-    > KATTS-1603 KATTS-154 Regression bug caused by KATTS-154 found in KATTS-1603 testing.
-
-(17 revisions)
+(15 revisions)
 
 The following files were ignored here:
 
