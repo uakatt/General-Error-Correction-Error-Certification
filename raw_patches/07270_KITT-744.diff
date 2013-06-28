@@ -102,6 +102,7 @@ Index: financial-system/kfs-cfg-dbs/trunk/latest/dat/KRNS_PARM_T.xml
 Property changes on: financial-system/kfs-cfg-dbs/trunk/latest/dat/KRNS_PARM_T.xml
 ___________________________________________________________________
 Added: svn:keywords
-   + Revision
-Author
-
+## -0,0 +1,2 ##
++Revision
++Author
+\ No newline at end of property

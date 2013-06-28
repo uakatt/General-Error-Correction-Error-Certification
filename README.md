@@ -36,13 +36,15 @@ This is a list of Jira tickets at the University of Arizona that relate to this 
   revisions: #7270, #7272
 * **KITT-2004**: (A change request against this modification)<br />
   revisions: #15345
+* **KATTS-697**: (A fix to the mod to not validate error cert tab on a save)<br />
+  revisions: #30476
 
 <h2>Liquibase Changesets</h2>
 
 * `latest/dat/KRNS_PARM_T.xml` saw the following activity:
-  * changed in #7270 (resultant file: [`whole_files/r7270/KRNS_PARM_T.xml`](General-Error-Correction-Error-Certification/blob/master/whole_files/r7270/KRNS_PARM_T.xml)).
+  * changed in #7270 (resultant file: [`whole_files/r7270/KRNS_PARM_T.xml`](whole_files/r7270/KRNS_PARM_T.xml)).
 * `update/KITT-744.xml` saw the following activity:
-  * created in #7270 (resultant file: [`whole_files/r7270/KITT-744.xml`](General-Error-Correction-Error-Certification/blob/master/whole_files/r7270/KITT-744.xml)).
+  * created in #7270 (resultant file: [`whole_files/r7270/KITT-744.xml`](whole_files/r7270/KITT-744.xml)).
 
 (2 changes among 2 files)
 
@@ -60,57 +62,58 @@ has been modified to:
 src/org/kuali/kfs...
 ```
 
-* [`patches/02142_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02142_KITT-353_cleaned.diff) is the patch file for #2142.
-* [`patches/02143_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02143_KITT-353_cleaned.diff) is the patch file for #2143.
-* [`patches/02144_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02144_KITT-353_cleaned.diff) is the patch file for #2144.
-* [`patches/02145_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02145_KITT-353_cleaned.diff) is the patch file for #2145.
-* [`patches/02146_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02146_KITT-353_cleaned.diff) is the patch file for #2146.
-* [`patches/02147_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02147_KITT-353_cleaned.diff) is the patch file for #2147.
-* [`patches/02148_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02148_KITT-353_cleaned.diff) is the patch file for #2148.
-* [`patches/02998_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02998_KITT-353_cleaned.diff) is the patch file for #2998.
-* [`patches/02999_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/02999_KITT-353_cleaned.diff) is the patch file for #2999.
-* [`patches/03003_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03003_KITT-353_cleaned.diff) is the patch file for #3003.
-* [`patches/03004_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03004_KITT-353_cleaned.diff) is the patch file for #3004.
-* [`patches/03005_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03005_KITT-353_cleaned.diff) is the patch file for #3005.
-* [`patches/03006_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03006_KITT-353_cleaned.diff) is the patch file for #3006.
-* [`patches/03007_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03007_KITT-353_cleaned.diff) is the patch file for #3007.
-* [`patches/03008_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03008_KITT-353_cleaned.diff) is the patch file for #3008.
-* [`patches/03009_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03009_KITT-353_cleaned.diff) is the patch file for #3009.
-* [`patches/03010_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03010_KITT-353_cleaned.diff) is the patch file for #3010.
-* [`patches/03011_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03011_KITT-353_cleaned.diff) is the patch file for #3011.
-* [`patches/03012_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03012_KITT-353_cleaned.diff) is the patch file for #3012.
-* [`patches/03014_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03014_KITT-353_cleaned.diff) is the patch file for #3014.
-* [`patches/03015_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03015_KITT-353_cleaned.diff) is the patch file for #3015.
-* [`patches/03016_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03016_KITT-353_cleaned.diff) is the patch file for #3016.
-* [`patches/03017_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03017_KITT-353_cleaned.diff) is the patch file for #3017.
-* [`patches/03018_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03018_KITT-353_cleaned.diff) is the patch file for #3018.
-* [`patches/03019_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03019_KITT-353_cleaned.diff) is the patch file for #3019.
-* [`patches/03020_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03020_KITT-353_cleaned.diff) is the patch file for #3020.
-* [`patches/03022_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03022_KITT-353_cleaned.diff) is the patch file for #3022.
-* [`patches/03025_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03025_KITT-353_cleaned.diff) is the patch file for #3025.
-* [`patches/03143_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03143_KITT-353_cleaned.diff) is the patch file for #3143.
-* [`patches/03144_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03144_KITT-353_cleaned.diff) is the patch file for #3144.
-* [`patches/03145_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03145_KITT-353_cleaned.diff) is the patch file for #3145.
-* [`patches/03146_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03146_KITT-353_cleaned.diff) is the patch file for #3146.
-* [`patches/03147_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03147_KITT-353_cleaned.diff) is the patch file for #3147.
-* [`patches/03148_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/03148_KITT-353_cleaned.diff) is the patch file for #3148.
-* [`patches/04027_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/04027_KITT-353_cleaned.diff) is the patch file for #4027.
-* [`patches/04210_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/04210_KITT-353_cleaned.diff) is the patch file for #4210.
-* [`patches/04607_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/04607_KITT-353_cleaned.diff) is the patch file for #4607.
-* [`patches/04688_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/04688_KITT-353_cleaned.diff) is the patch file for #4688.
-* [`patches/04753_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/04753_KITT-353_cleaned.diff) is the patch file for #4753.
-* [`patches/05240_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/05240_KITT-353_cleaned.diff) is the patch file for #5240.
-* [`patches/06860_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/06860_KITT-353_cleaned.diff) is the patch file for #6860.
-* [`patches/06861_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/06861_KITT-353_cleaned.diff) is the patch file for #6861.
-* [`patches/06862_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/06862_KITT-353_cleaned.diff) is the patch file for #6862.
-* [`patches/06863_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/06863_KITT-353_cleaned.diff) is the patch file for #6863.
-* [`patches/06864_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/06864_KITT-353_cleaned.diff) is the patch file for #6864.
-* [`patches/06865_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/06865_KITT-353_cleaned.diff) is the patch file for #6865.
-* [`patches/07228_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/07228_KITT-353_cleaned.diff) is the patch file for #7228.
-* [`patches/07229_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/07229_KITT-353_cleaned.diff) is the patch file for #7229.
-* [`patches/07232_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/07232_KITT-353_cleaned.diff) is the patch file for #7232.
-* [`patches/07233_KITT-353_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/07233_KITT-353_cleaned.diff) is the patch file for #7233.
-* [`patches/15345_KITT-2004_cleaned.diff`](General-Error-Correction-Error-Certification/blob/master/patches/15345_KITT-2004_cleaned.diff) is the patch file for #15345.
+* [`patches/02142_KITT-353_cleaned.diff`](patches/02142_KITT-353_cleaned.diff) is the patch file for #2142.
+* [`patches/02143_KITT-353_cleaned.diff`](patches/02143_KITT-353_cleaned.diff) is the patch file for #2143.
+* [`patches/02144_KITT-353_cleaned.diff`](patches/02144_KITT-353_cleaned.diff) is the patch file for #2144.
+* [`patches/02145_KITT-353_cleaned.diff`](patches/02145_KITT-353_cleaned.diff) is the patch file for #2145.
+* [`patches/02146_KITT-353_cleaned.diff`](patches/02146_KITT-353_cleaned.diff) is the patch file for #2146.
+* [`patches/02147_KITT-353_cleaned.diff`](patches/02147_KITT-353_cleaned.diff) is the patch file for #2147.
+* [`patches/02148_KITT-353_cleaned.diff`](patches/02148_KITT-353_cleaned.diff) is the patch file for #2148.
+* [`patches/02998_KITT-353_cleaned.diff`](patches/02998_KITT-353_cleaned.diff) is the patch file for #2998.
+* [`patches/02999_KITT-353_cleaned.diff`](patches/02999_KITT-353_cleaned.diff) is the patch file for #2999.
+* [`patches/03003_KITT-353_cleaned.diff`](patches/03003_KITT-353_cleaned.diff) is the patch file for #3003.
+* [`patches/03004_KITT-353_cleaned.diff`](patches/03004_KITT-353_cleaned.diff) is the patch file for #3004.
+* [`patches/03005_KITT-353_cleaned.diff`](patches/03005_KITT-353_cleaned.diff) is the patch file for #3005.
+* [`patches/03006_KITT-353_cleaned.diff`](patches/03006_KITT-353_cleaned.diff) is the patch file for #3006.
+* [`patches/03007_KITT-353_cleaned.diff`](patches/03007_KITT-353_cleaned.diff) is the patch file for #3007.
+* [`patches/03008_KITT-353_cleaned.diff`](patches/03008_KITT-353_cleaned.diff) is the patch file for #3008.
+* [`patches/03009_KITT-353_cleaned.diff`](patches/03009_KITT-353_cleaned.diff) is the patch file for #3009.
+* [`patches/03010_KITT-353_cleaned.diff`](patches/03010_KITT-353_cleaned.diff) is the patch file for #3010.
+* [`patches/03011_KITT-353_cleaned.diff`](patches/03011_KITT-353_cleaned.diff) is the patch file for #3011.
+* [`patches/03012_KITT-353_cleaned.diff`](patches/03012_KITT-353_cleaned.diff) is the patch file for #3012.
+* [`patches/03014_KITT-353_cleaned.diff`](patches/03014_KITT-353_cleaned.diff) is the patch file for #3014.
+* [`patches/03015_KITT-353_cleaned.diff`](patches/03015_KITT-353_cleaned.diff) is the patch file for #3015.
+* [`patches/03016_KITT-353_cleaned.diff`](patches/03016_KITT-353_cleaned.diff) is the patch file for #3016.
+* [`patches/03017_KITT-353_cleaned.diff`](patches/03017_KITT-353_cleaned.diff) is the patch file for #3017.
+* [`patches/03018_KITT-353_cleaned.diff`](patches/03018_KITT-353_cleaned.diff) is the patch file for #3018.
+* [`patches/03019_KITT-353_cleaned.diff`](patches/03019_KITT-353_cleaned.diff) is the patch file for #3019.
+* [`patches/03020_KITT-353_cleaned.diff`](patches/03020_KITT-353_cleaned.diff) is the patch file for #3020.
+* [`patches/03022_KITT-353_cleaned.diff`](patches/03022_KITT-353_cleaned.diff) is the patch file for #3022.
+* [`patches/03025_KITT-353_cleaned.diff`](patches/03025_KITT-353_cleaned.diff) is the patch file for #3025.
+* [`patches/03143_KITT-353_cleaned.diff`](patches/03143_KITT-353_cleaned.diff) is the patch file for #3143.
+* [`patches/03144_KITT-353_cleaned.diff`](patches/03144_KITT-353_cleaned.diff) is the patch file for #3144.
+* [`patches/03145_KITT-353_cleaned.diff`](patches/03145_KITT-353_cleaned.diff) is the patch file for #3145.
+* [`patches/03146_KITT-353_cleaned.diff`](patches/03146_KITT-353_cleaned.diff) is the patch file for #3146.
+* [`patches/03147_KITT-353_cleaned.diff`](patches/03147_KITT-353_cleaned.diff) is the patch file for #3147.
+* [`patches/03148_KITT-353_cleaned.diff`](patches/03148_KITT-353_cleaned.diff) is the patch file for #3148.
+* [`patches/04027_KITT-353_cleaned.diff`](patches/04027_KITT-353_cleaned.diff) is the patch file for #4027.
+* [`patches/04210_KITT-353_cleaned.diff`](patches/04210_KITT-353_cleaned.diff) is the patch file for #4210.
+* [`patches/04607_KITT-353_cleaned.diff`](patches/04607_KITT-353_cleaned.diff) is the patch file for #4607.
+* [`patches/04688_KITT-353_cleaned.diff`](patches/04688_KITT-353_cleaned.diff) is the patch file for #4688.
+* [`patches/04753_KITT-353_cleaned.diff`](patches/04753_KITT-353_cleaned.diff) is the patch file for #4753.
+* [`patches/05240_KITT-353_cleaned.diff`](patches/05240_KITT-353_cleaned.diff) is the patch file for #5240.
+* [`patches/06860_KITT-353_cleaned.diff`](patches/06860_KITT-353_cleaned.diff) is the patch file for #6860.
+* [`patches/06861_KITT-353_cleaned.diff`](patches/06861_KITT-353_cleaned.diff) is the patch file for #6861.
+* [`patches/06862_KITT-353_cleaned.diff`](patches/06862_KITT-353_cleaned.diff) is the patch file for #6862.
+* [`patches/06863_KITT-353_cleaned.diff`](patches/06863_KITT-353_cleaned.diff) is the patch file for #6863.
+* [`patches/06864_KITT-353_cleaned.diff`](patches/06864_KITT-353_cleaned.diff) is the patch file for #6864.
+* [`patches/06865_KITT-353_cleaned.diff`](patches/06865_KITT-353_cleaned.diff) is the patch file for #6865.
+* [`patches/07228_KITT-353_cleaned.diff`](patches/07228_KITT-353_cleaned.diff) is the patch file for #7228.
+* [`patches/07229_KITT-353_cleaned.diff`](patches/07229_KITT-353_cleaned.diff) is the patch file for #7229.
+* [`patches/07232_KITT-353_cleaned.diff`](patches/07232_KITT-353_cleaned.diff) is the patch file for #7232.
+* [`patches/07233_KITT-353_cleaned.diff`](patches/07233_KITT-353_cleaned.diff) is the patch file for #7233.
+* [`patches/15345_KITT-2004_cleaned.diff`](patches/15345_KITT-2004_cleaned.diff) is the patch file for #15345.
+* [`patches/30476_KATTS-697_cleaned.diff`](patches/30476_KATTS-697_cleaned.diff) is the patch file for #30476.
 
 <h2>Revisions</h2>
 
@@ -126,7 +129,7 @@ file for every revision listed below for the following reasons:
   changesets are not provided as patches. They are instead presented as intact files under the
   `liquibase-changesets/` directory.
 
-[Here](General-Error-Correction-Error-Certification/blob/master/patch_log.txt) is a printout of `svn log -v` for each revision.
+[Here](patch_log.txt) is a printout of `svn log -v` for each revision.
 
 *   \#2142 was committed against KITT-353 on 2009-05-27 00:50:20 UTC by <strong>hlo</strong>.
 
@@ -283,6 +286,9 @@ file for every revision listed below for the following reasons:
     > KFSI-2900
     > KITT-2004
     > Adding reference origin code to validations and unit test. Also modified error message.
+*   \#30476 was committed against KATTS-697 on 2013-02-25 23:57:44 UTC by <strong>jwingate@CATNET.ARIZONA.EDU</strong>.
+
+    > KATTS-697 GEC/YECEC documents error certification being validated on save
 
 <h2>Files</h2>
 
@@ -382,8 +388,28 @@ For each file that was changed or added for this modification, I've looked at it
 *   **#24805** touches `/work/src/edu/arizona/kfs/fp/document/GeneralErrorCorrectionDocument.java`.
 
     > KFSI-6427 KITT-3085 make sure that the new copy gets its own certification table to prevent overwriting
+*   **#28634** touches: 
+    * `/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml`
+    * `/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionRefNumberValidation.java`
 
-(12 revisions)
+    > KATTS-143 - added reference number validation for existing AC entry, and available amount validation
+*   **#30545** touches `/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml`.
+
+    > KATTS-706 change line parser to GeneralErrorCorrectionDocumentAccountingLineParser
+*   **#30811** touches: 
+    * `/work/src/edu/arizona/kfs/fp/document/datadictionary/GeneralErrorCorrectionDocument.xml`
+    * `/work/web-root/WEB-INF/tags/fp/errorCertification.tag`
+    * `/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml`
+
+    > KATTS-154 GEC/YEGE: If the GEC/YEGE require the error cert be completed after the docs are Enroute the approver cannot edit these fields and has to disapprove.
+*   **#31381** touches `/work/src/edu/arizona/kfs/fp/document/datadictionary/YearEndGeneralErrorCorrectionDocument.xml`.
+
+    > KATTS-1603 Modify YE document Routing To Include Fiscal Officer
+*   **#31420** touches `/work/web-root/WEB-INF/tags/fp/errorCertification.tag`.
+
+    > KATTS-1603 KATTS-154 Regression bug caused by KATTS-154 found in KATTS-1603 testing.
+
+(17 revisions)
 
 The following files were ignored here:
 

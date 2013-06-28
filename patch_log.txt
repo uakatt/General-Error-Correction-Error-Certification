@@ -414,3 +414,10 @@ KFSI-2900
 KITT-2004
 Adding reference origin code to validations and unit test. Also modified error message.
 ------------------------------------------------------------------------
+------------------------------------------------------------------------
+r30476 | jwingate@CATNET.ARIZONA.EDU | 2013-02-25 16:57:44 -0700 (Mon, 25 Feb 2013) | 1 line
+Changed paths:
+   M /financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+
+KATTS-697 GEC/YECEC documents error certification being validated on save
+------------------------------------------------------------------------

@@ -1,0 +1,14 @@
+Index: financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml
+===================================================================
+--- financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml	(revision 30475)
++++ financial-system/kfs/trunk/work/src/edu/arizona/kfs/fp/document/validation/configuration/GeneralErrorCorrectionValidation.xml	(revision 30476)
+@@ -43,7 +43,8 @@
+   						</list>
+   					</property>
+   				</bean>
+-  				<bean parent="GeneralErrorCorrection-errorCertificationValidation" scope="prototype" />
++  				<!-- KATTS-697 GEC/YECEC documents error certification being validated on save -->
++  				<!-- <bean parent="GeneralErrorCorrection-errorCertificationValidation" scope="prototype" /> -->
+ 				<!-- KITT-803 -->
+ 				<bean parent="AccountingDocument-globalTransactionAccountingLineValuesAllowedValidation" scope="prototype">
+ 					<property name="accountingDocumentParameterPropertyName" value="document" />

@@ -1,3 +1,37 @@
+Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java
+===================================================================
+--- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java	(revision 7239)
++++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java	(revision 7240)
+@@ -1,29 +0,0 @@
+-/*
+- * Copyright 2009 The Kuali Foundation.
+- * 
+- * Licensed under the Educational Community License, Version 1.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- * 
+- * http://www.opensource.org/licenses/ecl1.php
+- * 
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- */
+-package edu.arizona.kfs.fp.document.web.struts;
+-
+-import edu.arizona.kfs.fp.businessobject.ErrorCertification;
+-import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
+-
+-public class GeneralErrorCorrectionForm extends org.kuali.kfs.fp.document.web.struts.GeneralErrorCorrectionForm {       
+-    
+-    public GeneralErrorCorrectionForm() {
+-        super();
+-        GeneralErrorCorrectionDocument document = new GeneralErrorCorrectionDocument();
+-        document.setErrorCertification(new ErrorCertification());
+-        setDocument(document); 
+-    }    
+-}
 Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java
 ===================================================================
 --- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/validation/impl/GeneralErrorCorrectionDocumentPreRules.java	(revision 7239)
@@ -94,40 +128,6 @@ Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/va
                          
          if (newCompareDate != null) {
              daysFromParameter = new Integer(newCompareDate);
-Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java
-===================================================================
---- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java	(revision 7239)
-+++ financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/GeneralErrorCorrectionForm.java	(revision 7240)
-@@ -1,29 +0,0 @@
--/*
-- * Copyright 2009 The Kuali Foundation.
-- * 
-- * Licensed under the Educational Community License, Version 1.0 (the "License");
-- * you may not use this file except in compliance with the License.
-- * You may obtain a copy of the License at
-- * 
-- * http://www.opensource.org/licenses/ecl1.php
-- * 
-- * Unless required by applicable law or agreed to in writing, software
-- * distributed under the License is distributed on an "AS IS" BASIS,
-- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-- * See the License for the specific language governing permissions and
-- * limitations under the License.
-- */
--package edu.arizona.kfs.fp.document.web.struts;
--
--import edu.arizona.kfs.fp.businessobject.ErrorCertification;
--import edu.arizona.kfs.fp.document.GeneralErrorCorrectionDocument;
--
--public class GeneralErrorCorrectionForm extends org.kuali.kfs.fp.document.web.struts.GeneralErrorCorrectionForm {       
--    
--    public GeneralErrorCorrectionForm() {
--        super();
--        GeneralErrorCorrectionDocument document = new GeneralErrorCorrectionDocument();
--        document.setErrorCertification(new ErrorCertification());
--        setDocument(document); 
--    }    
--}
 Index: financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java
 ===================================================================
 --- financial-system/kfs/branches/3.0/work/src/edu/arizona/kfs/fp/document/web/struts/YearEndGeneralErrorCorrectionForm.java	(revision 7239)
